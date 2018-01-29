@@ -39,5 +39,11 @@ contract H2ICO is StandardToken {
     function addUser(address _user)  public isOwner {
         users.push(_user);
     }
+    function getTotalUsers() public constant returns (uint) {
+        return users.length;  
+    }
+    function name(type name) {
+        
+    }
 
 }
