@@ -1,7 +1,6 @@
 var controller = artifacts.require("Controller");
 
 contract('controller',function(accounts) {
-<<<<<<< HEAD
 
     let control;
     let token;
@@ -46,7 +45,6 @@ contract('controller',function(accounts) {
     //         assert.equal(user,true,"User not added")
     //     });
     // });
-=======
    let control
     beforeEach(async () => {
         control = await controller.new()
@@ -74,6 +72,5 @@ contract('controller',function(accounts) {
     //     });
     // });
 
->>>>>>> 290f6dddffe3b6b7b43d6c82ae31a06d7c713216
 
 });
