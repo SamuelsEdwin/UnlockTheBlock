@@ -5,12 +5,7 @@ import "./Date/DateTime.sol";
 import "./Date/DateTimeAPI.sol";
 
 contract H2ICO is MintableToken {
-
-    // struct Date {
-    //     uint8 month;
-    //     uint16 year;
-    // }
-
+    
     string private name = "H2ICO";
     string private symbol = "kl";
     uint8 private decimals = 3;

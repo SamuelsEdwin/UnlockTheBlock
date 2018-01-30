@@ -30,14 +30,23 @@ contract Controller {
         }
     }
 
-/**
-    * Description Function allowing the owner only to set the water limit per user per month
-    * Param _limit The amount that will be allocated to userWaterLimit for each user
+    /**
+    * Description   Function allowing the owner only to set the water limit per user per month
+    * Param _limit  The amount that will be allocated to userWaterLimit for each user
     *
     */
 
     function setUserWaterLimit(uint _limit) public isOwner {
         userWaterLimit = _limit;
+    }
+
+    /**
+    * Description   Function allowing returning the current water limit
+    * return uint   The allocated Water Limit for each user
+    *
+    */
+    function getUserWaterLimit() public returns (uint) {
+        return userWaterLimit;
     }
 
     /**
