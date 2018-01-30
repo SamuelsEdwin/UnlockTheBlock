@@ -8,6 +8,7 @@ contract H2ICO is StandardToken {
     uint8 private decimals = 3;
     uint private INITIAL_SUPPLY = 12000;
     address private owner;
+    uint private lengthCounter =0;
     
     address[] users;
 
@@ -41,9 +42,10 @@ contract H2ICO is StandardToken {
     function addUser(address _user)  public isOwner {
         users.push(_user);
         validatingMap[_user] = true;
+        lengthCounter++;
     }
     function getTotalUsers() public constant returns (uint) {
-        return users.length;  
+        return lengthCounter;  
     }
     function distribute() public isOwner {
         uint arrayLength = getTotalUsers();
@@ -60,6 +62,7 @@ contract H2ICO is StandardToken {
     }
     function removeUser(address _user)public isOwner {
         validatingMap[_user] = false;
+        lengthCounter--;
     }
 
 }
