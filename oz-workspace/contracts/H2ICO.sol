@@ -168,9 +168,8 @@ event Mint(address indexed to, uint256 amount);
     */
     function getDate() public view returns(Date) {
         Date memory rtrDate;
-        uint timeStamp = now;
-        rtrDate.month = date.getMonth(timeStamp);
-        rtrDate.year = date.getYear(timeStamp);
+        rtrDate.month = date.getMonth(_timeStamp);
+        rtrDate.year = date.getYear(_timeStamp);
         return rtrDate;
     }
 
