@@ -21,13 +21,13 @@ App = {
   },
 
   initContract: function() {
-    $.getJSON('TutorialToken.json', function(data) {
+    $.getJSON('H2ICO.json', function(data) {
       // Get the necessary contract artifact file and instantiate it with truffle-contract.
-      var TutorialTokenArtifact = data;
-      App.contracts.TutorialToken = TruffleContract(TutorialTokenArtifact);
+      var H2ICOArtifact = data;
+      App.contracts.H2ICO = TruffleContract(H2ICOArtifact);
 
       // Set the provider for our contract.
-      App.contracts.TutorialToken.setProvider(App.web3Provider);
+      App.contracts.H2ICO.setProvider(App.web3Provider);
 
       // Use our contract to retieve and mark the adopted pets.
       return App.getBalances();
@@ -40,7 +40,7 @@ App = {
     $(document).on('click', '#transferButton', App.handleTransfer);
   },
   bindEvents: function() {
-    $(document).on('click', '#IncreaseButton', App.handleIncrease);
+    $(document).on('click', '#IncreaseButton', App.handleSet);
   },
 
 
@@ -52,7 +52,7 @@ App = {
 
     console.log('Transfer ' + amount + ' TT to ' + toAddress);
 
-    var tutorialTokenInstance;
+    var H2ICOInstance;
 
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
@@ -61,10 +61,10 @@ App = {
 
       var account = accounts[0];
 
-      App.contracts.TutorialToken.deployed().then(function(instance) {
-        tutorialTokenInstance = instance;
+      App.contracts.H2ICO.deployed().then(function(instance) {
+        H2ICOInstance = instance;
 
-        return tutorialTokenInstance.transfer(toAddress, amount, {from: account});
+        return H2ICOInstance.transfer(toAddress, amount, {from: account});
       }).then(function(result) {
         alert('Transfer Successful!');
         return App.getBalances();
@@ -73,15 +73,15 @@ App = {
       });
     });
   },
-  handleIncrease: function(event) {
+  handleSet: function(event) {
     event.preventDefault();
 
     var amount = parseInt($('#IncreaseAmount').val());
     
 
-    console.log('Increase amount by' + amount );
+    console.log('Set amount by' + amount );
 
-    var tutorialTokenInstance;
+    var H2ICOInstance;
 
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
@@ -90,10 +90,10 @@ App = {
 
       var account = accounts[0];
 
-      App.contracts.TutorialToken.deployed().then(function(instance) {
-        tutorialTokenInstance = instance;
+      App.contracts.H2ICO.deployed().then(function(instance) {
+        H2ICOInstance = instance;
 
-        return tutorialTokenInstance.increasedSupply(amount);
+        return H2ICOInstance.setSupply(amount);
       }).then(function(result) {
         alert('Increase Successful!');
         return App.getBalances();
@@ -106,7 +106,7 @@ App = {
   getBalances: function(adopters, account) {
     console.log('Getting balances...');
 
-    var tutorialTokenInstance;
+    var H2ICOInstance;
 
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
@@ -115,10 +115,10 @@ App = {
 
       var account = accounts[0];
 
-      App.contracts.TutorialToken.deployed().then(function(instance) {
-        tutorialTokenInstance = instance;
+      App.contracts.H2ICO.deployed().then(function(instance) {
+        H2ICOInstance = instance;
 
-        return tutorialTokenInstance.balanceOf(account);
+        return H2ICOInstance.balanceOf(account);
       }).then(function(result) {
         balance = result.c[0];
 

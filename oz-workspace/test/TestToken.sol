@@ -10,7 +10,7 @@ contract TestToken {
 
   // Testing the adopt() function
   function testOwnerHasInitialValue() public {
-      uint expected = 0;
+      uint expected = 12000;
       Assert.equal(token.totalSupply(),expected,"Owner Should have 0 tokens");
     }
   
@@ -18,6 +18,7 @@ contract TestToken {
     uint expected = 11000;
     token.setSupply(expected);
     Assert.equal(token.totalSupply(),expected,"Owner Should have 11000 tokens");
+    Assert.equal(token.balanceOf(msg.sender),expected,"Owners balance Should be 11000 tokens");
   }
 
 

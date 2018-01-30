@@ -1,5 +1,5 @@
-var TutorialToken = artifacts.require("TutorialToken");
+var H2ICO = artifacts.require("H2ICO");
 
 module.exports = function(deployer) {
-  deployer.deploy(TutorialToken);
+  deployer.deploy(H2ICO);
 };
