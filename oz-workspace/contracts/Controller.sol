@@ -25,6 +25,7 @@ contract Controller {
     function Controller () public {
         userWaterLimit = 0;
         owner = msg.sender;
+       // token = new H2ICO ();
     }
 
     /**
@@ -117,7 +118,7 @@ contract Controller {
         require(token.mint(msg.sender, userWaterLimit));
         mapTimestamp(msg.sender);
     }
- 
+    //todo - revert to msg sender
     /** 
     * Description   Function determining whether the user has withdrawn their allocated amount
     *               for the month already or not

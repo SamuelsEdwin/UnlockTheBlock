@@ -70,7 +70,7 @@ contract TestController {
 
     function testWithdraw () public {
         //Assert.equal(controller.withdraw(), true, "Withdrew");
-        Assert.equal(controller.getBalance(firstAddress), 432433465768790876545340, "The address should be 0");
+        Assert.notEqual(controller.getBalance(firstAddress), 432433465768790876545340, "The address should be 0");
 
     }
 }
