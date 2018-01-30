@@ -14,7 +14,9 @@ contract Controller {
     
     mapping (address => bool) validatingMap;
     mapping (address => uint) lastTimeStamp;
-   
+    address tokenAddress;
+
+
 
     function Controller () public {
         userWaterLimit = 0;
@@ -28,6 +30,9 @@ contract Controller {
         if (msg.sender == owner) {
             _;
         }
+    }
+    function setTokenAddr(address _tokenAddr) public {
+        tokenAddress = _tokenAddr;
     }
 
     /**
