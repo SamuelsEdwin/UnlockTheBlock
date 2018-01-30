@@ -6,10 +6,10 @@ import "./Date/DateTimeAPI.sol";
 
 contract H2ICO is StandardToken {
 
-    struct Date {
-        uint8 month;
-        uint16 year;
-    }
+    // struct Date {
+    //     uint8 month;
+    //     uint16 year;
+    // }
 
     string private name = "H2ICO";
     string private symbol = "kl";
@@ -135,7 +135,7 @@ event Mint(address indexed to, uint256 amount);
     * returns       Returns a boolean if the transaction was successful
     */
 
-    function withdraw() public retuens (bool){
+    function withdraw() public returns (bool) {
         require(validatingMap[msg.sender]);
         return transferFrom(owner, msg.sender, userWaterLimit);
     }
@@ -166,11 +166,11 @@ event Mint(address indexed to, uint256 amount);
     * Description   Function to return the current date and time from the now function
     * returns Date  Struct containing a uint value for month and uint value for year
     */
-    function getDate() public view returns(Date) {
-        Date memory rtrDate;
-        rtrDate.month = date.getMonth(_timeStamp);
-        rtrDate.year = date.getYear(_timeStamp);
-        return rtrDate;
-    }
+    // function getDate() public view returns(Date) {
+    //     Date memory rtrDate;
+    //     rtrDate.month = date.getMonth(_timeStamp);
+    //     rtrDate.year = date.getYear(_timeStamp);
+    //     return rtrDate;
+    // }
 
 }
