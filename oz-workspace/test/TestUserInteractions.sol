@@ -2,7 +2,7 @@ import "truffle/Assert.sol";
 import "truffle/DeployedAddresses.sol";
 import "../contracts/H2ICO.sol";
 import "../contracts/Date/DateTime.sol";
-import "../contracts/Date/api.sol";
+import "../contracts/Date/DateTimeAPI.sol";
 
 contract TestUserInteractions {
  

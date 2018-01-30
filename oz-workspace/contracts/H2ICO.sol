@@ -2,7 +2,7 @@ pragma solidity ^0.4.17;
 
 import "zeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
 import "./Date/DateTime.sol";
-import "./Date/api.sol";
+import "./Date/DateTimeAPI.sol";
 
 contract H2ICO is StandardToken {
 
