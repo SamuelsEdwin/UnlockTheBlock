@@ -39,14 +39,14 @@ contract TestController {
         Assert.equal(controller.getUserWaterLimit(), 0, "The water limit should be initialised to 0");
     }
 
-    function testAddUser() public {
-        Assert.equal(controller.containsUser(firstAddress),true,"User 1 should be registerd");
-        Assert.equal(controller.containsUser(secondAddress),true,"User 2 should be registerd");
-        Assert.equal(controller.containsUser(thirdAddress),true,"User 3 should be registerd");
-        Assert.equal(controller.containsUser(fourthAddress),true,"User 4 should be registerd");
-        Assert.equal(controller.containsUser(fifthAddress),true,"User 5 should be registerd");
-        Assert.equal(controller.containsUser(0x01020),false,"User 6 should not be registerd");
-    }
+    // function testAddUser() public {
+    //     Assert.equal(controller.containsUser(firstAddress),true,"User 1 should be registerd");
+    //     Assert.equal(controller.containsUser(secondAddress),true,"User 2 should be registerd");
+    //     Assert.equal(controller.containsUser(thirdAddress),true,"User 3 should be registerd");
+    //     Assert.equal(controller.containsUser(fourthAddress),true,"User 4 should be registerd");
+    //     Assert.equal(controller.containsUser(fifthAddress),true,"User 5 should be registerd");
+    //     Assert.equal(controller.containsUser(0x01020),false,"User 6 should not be registerd");
+    // }
   
     function testRemoveUser() public {
         Assert.equal(controller.containsUser(firstAddress),true,"First address should be in User List");

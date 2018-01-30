@@ -16,6 +16,15 @@ contract('controller',function(accounts) {
         assert.equal(user,true,"User not added")
     });
 
+    it("should remove user", async function() {
+        await control.addUser(accounts[1]);
+        const user = await control.containsUser(accounts[1]);
+        assert.equal(user,true,"User not added")
+        await control.removeUser(accounts[1]);
+        const noUser = await control.containsUser(accounts[1]);
+        assert.equal(noUser,false,"User not removed");
+    });
+
     it("should withdraw Tokens", async function() {
         await control.addUser(accounts[1]);
         await control.setUserWaterLimit(80);
@@ -25,52 +34,46 @@ contract('controller',function(accounts) {
     });
 
 
-    it ("should have a water limit of 80",function(){
-        return controller.deployed().then(function(instance){
-             instance.generateToken();
-             instance.setUserWaterLimit(80);
-             return instance.getUserWaterLimit();
-        }).then(function(waterLimit) {
-            assert.equal(waterLimit.valueOf(),80,"80 wasn't the water limit")
-
-        });
-    });
-
-    // it ("should add user", function(){
+    // it ("should have a water limit of 80",function(){
     //     return controller.deployed().then(function(instance){
-    //         instance.generateToken();
-    //         instance.addUser(accounts[0]);
-    //     return instance.containsUser(accounts[0]);
-    //     }).then(function(user) {
-    //         assert.equal(user,true,"User not added")
+    //          instance.generateToken();
+    //          instance.setUserWaterLimit(80);
+    //          return instance.getUserWaterLimit();
+    //     }).then(function(waterLimit) {
+    //         assert.equal(waterLimit.valueOf(),80,"80 wasn't the water limit")
+
     //     });
     // });
-   let control
-    beforeEach(async () => {
-        control = await controller.new()
-    })
-    
+
     it ("should have a water limit of 80", async () => {
         let set
         let get
-        await control.generateToken();
         set = await control.setUserWaterLimit(80, {from: accounts[0]});
         get = await control.getUserWaterLimit.call();
         assert.equal(80,get.toNumber(),"80 wasn't the water limit")
     });
 
-    // it ("should add user", function(){
-    //     return control.deployed().then(function(instance){
-    //     instance.generateToken();
-    //     instance.addUser(accounts[0]);
-        
-    //     return instance.containsUser(accounts[0]);
-    //     }).then(function(user) {
-    //         assert.equal(user,true,"User not added");
-           
+    it ("should not change from 80 to 90", async () => {
+        let get
+        await control.setUserWaterLimit(80, {from: accounts[0]});
+        await control.setUserWaterLimit(90, {from: accounts[1]});
+        get = await control.getUserWaterLimit.call();
+        assert.equal(80,get.toNumber(),"80 wasn't the water limit")
+    });
 
-    //     });
-    // });
-
+    it ("should exchange tokens", async () => {
+        let get
+        await control.setUserWaterLimit(100, {from: accounts[0]});
+        await control.addUser(accounts[1]);
+        await control.addUser(accounts[2]);
+        await control.withdraw({from:accounts[1]});
+        const balance = await control.getBalance(accounts[1]);
+        assert.equal(100, balance.toNumber(), "Withdrawal unsuccessful");
+        await control.exchange(accounts[1], accounts[2], 100);
+        const balanceOne = await control.getBalance(accounts[2]);
+        //assert.equal(95,balanceOne.toNumber(),"Incorrectly exchanged");
+        const balanceTwo = await control.getBalance(accounts[1]);
+        assert.equal(0, balanceTwo.toNumber(),"Balance not reduced")
+    });
 
 });
