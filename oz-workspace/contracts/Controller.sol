@@ -18,35 +18,36 @@ contract Controller {
     mapping (address => uint) lastTimeStamp;
     mapping (address => uint) burnMap;
     address tokenAddress;
-    H2ICO token;
     
-
-
-
+    /**
+    * Description   Constructor initialising the controller contract
+    */
     function Controller () public {
         userWaterLimit = 0;
         owner = msg.sender;
     }
-        /*
-        Description: Modifier to be used to ensure the sender is in fact the owner
-        continues if true, stops executing if false
+
+    /**
+    Description:    Modifier to be used to ensure the sender is in fact the owner
+                    continues if true, stops executing if false
     */
      modifier isOwner {
         if (msg.sender == owner) {
             _;
         }
     }
-     /*
-        Description: sets the address ofthe token controlled by this contract.
+    
+    /**
+    *   Description: sets the address ofthe token controlled by this contract.
     */
     function setTokenAddr(address _tokenAddr) public isOwner {
         tokenAddress = _tokenAddr;
         token = H2ICO (tokenAddress);
     }
-    /*
-        Description proposed create token function
-        Owner should be this contract given this method is invoked
-
+    
+    /**
+    * Description   Proposed create token function
+    *               Owner should be this contract given this method is invoked
     */
     function generateToken() public isOwner {
         token = new H2ICO ();
@@ -109,10 +110,8 @@ contract Controller {
     *               Tokens are minted according to need and issued to the users
     *               Only valid users are able to withdraw, as well as users are limited to withdrawing
     *               once a month
-    * returns       Returns a boolean if the transaction was successful
+    * returns bool  Returns a true boolean if the transaction was successful
     */
-
-    
     function withdraw() public returns (bool) {
         require(validatingMap[msg.sender]);
         require(canWithdraw(msg.sender));
@@ -120,17 +119,24 @@ contract Controller {
         mapTimestamp(msg.sender);
     }
  
-
+    /** 
+    * Description   Function determining whether the user has withdrawn their allocated amount
+    *               for the month already or not
+    * Param address The user's address that we are willing to check
+    * returns bool  Returns true if he is allowed to or false if he has already withdrawn his amount
+    */
     function canWithdraw(address _user) public view returns(bool) {
         uint timestamp = now;
-        
         uint16 thisYear = date.getYear(timestamp);
         uint8 thisMonth = date.getMonth(timestamp);
         uint currentTimestamp = date.toTimestamp(thisYear, thisMonth, 1);
         return lastTimeStamp[_user]<currentTimestamp;
-
     }
 
+    /** 
+    * Description   Function updating the timestamp associated with a users most recent withdrawal
+    * Params _user  The public address of the user we are updating
+    */
     function mapTimestamp(address _user) private {
         uint timestamp = now;
         uint16 thisYear = date.getYear(timestamp);
