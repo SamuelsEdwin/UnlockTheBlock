@@ -44,6 +44,7 @@ contract Controller {
     }
     /*
         Description proposed create token function
+        Owner should be this contract given this method is invoked
 
     */
     function generateToken() public isOwner {
