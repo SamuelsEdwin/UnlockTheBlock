@@ -22,6 +22,13 @@ contract H2ICO is MintableToken {
         balances[msg.sender] = INITIAL_SUPPLY;
         owner = msg.sender;
     }
+    /**
+   * @dev Transfer tokens from one address to another burning a percentage of the tokens
+   * @param _from address The address which you want to send tokens from
+   * @param _to address The address which you want to transfer to
+   * @param _value uint256 the amount of tokens to be transferred
+   * @param _burnPercentage the water that is burnt "lost"  
+   */
 
     function exchange(address _from, address _to, uint256 _value,uint _burnPercentage) public onlyOwner returns (bool) {
         require(_burnPercentage<100);
