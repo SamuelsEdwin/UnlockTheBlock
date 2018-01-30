@@ -6,14 +6,15 @@ import "./Date/DateTimeAPI.sol";
 
 
 contract Controller {
-        address private owner;
+   
+    address private owner;
     uint private userCounter =0;
     uint private userWaterLimit;
     DateTime date = new DateTime();//on main network call actual contract
     
     mapping (address => bool) validatingMap;
-    mapping (address => uint) lastPurchaseDate;
-
+    mapping (address => uint) lastTimeStamp;
+   
 
     function Controller () public {
         userWaterLimit = 0;
@@ -67,12 +68,31 @@ contract Controller {
     * returns       Returns a boolean if the transaction was successful
     */
 
-/* Needs to be modified to work with Tokens
+    
     function withdraw() public returns (bool) {
         require(validatingMap[msg.sender]);
-        return transferFrom(owner, msg.sender, userWaterLimit);
+        require(canWithdraw(msg.sender));
+        //require(transferFrom(owner, msg.sender, userWaterLimit));//todo mint
+        mapTimestamp(msg.sender);
     }
-/* 
+ 
+
+    function canWithdraw(address _user) public view returns(bool) {
+        uint timestamp = now;
+        
+        uint16 thisYear = date.getYear(timestamp);
+        uint8 thisMonth = date.getMonth(timestamp);
+        uint currentTimestamp = date.toTimestamp(thisYear, thisMonth, 1);
+        return lastTimeStamp[_user]<currentTimestamp;
+
+    }
+
+    function mapTimestamp(address _user) private {
+        uint timestamp = now;
+        uint16 thisYear = date.getYear(timestamp);
+        uint8 thisMonth = date.getMonth(timestamp);
+        lastTimeStamp[_user] = date.toTimestamp(thisYear, thisMonth, 1);
+    }
 
     /**
     * Description    Function confirming whether a user is a valid user in the network

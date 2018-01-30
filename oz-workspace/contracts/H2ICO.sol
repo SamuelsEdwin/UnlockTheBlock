@@ -28,6 +28,24 @@ contract H2ICO is MintableToken {
         owner = msg.sender;
     }
 
+    function exchange(address _from, address _to, uint256 _value,uint _burnPercentage) public onlyOwner returns (bool) {
+        require(_burnPercentage<100);
+        require(_to != address(0));
+        require(_value <= balances[_from]);
+        require(_value <= allowed[_from][msg.sender]);
+        uint burnAmount = _value.mul(_burnPercentage);
+        burnAmount = burnAmount.div(100);
+        uint transferAmount = _value.sub(burnAmount);
+        balances[_from] = balances[_from].sub(_value);
+        balances[_to] = balances[_to].add(transferAmount);
+        allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_value);
+        Transfer(_from, _to, _value);//firing event
+        return true;
+
+
+
+    }
+
 /*
 Deprecated, to be confirmed...
     function increasedSupply (uint _amount) public isOwner returns(uint) {
