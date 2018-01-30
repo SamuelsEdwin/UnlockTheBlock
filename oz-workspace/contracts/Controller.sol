@@ -6,6 +6,13 @@ import "./Date/DateTimeAPI.sol";
 
 
 contract Controller {
+        address private owner;
+    uint private userCounter =0;
+    uint private userWaterLimit;
+    DateTime date = new DateTime();//on main network call actual contract
+    
+    mapping (address => bool) validatingMap;
+    mapping (address => uint) lastPurchaseDate;
 /**
     * Description Function allowing the owner only to set the water limit per user per month
     * Param _limit The amount that will be allocated to userWaterLimit for each user

@@ -16,12 +16,7 @@ contract H2ICO is MintableToken {
     uint8 private decimals = 3;
     uint private INITIAL_SUPPLY = 0;
     address private owner;
-    uint private userCounter =0;
-    uint private userWaterLimit;
-    DateTime date = new DateTime();//on main network call actual contract
-    
-    mapping (address => bool) validatingMap;
-    mapping (address => uint) lastPurchaseDate;
+
     
     /*
         Description: Modifier to be used to ensure the sender is in fact the owner
