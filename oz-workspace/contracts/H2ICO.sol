@@ -1,8 +1,17 @@
 pragma solidity ^0.4.17;
 
 import "zeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
+import "./Date/DateTime.sol";
+import "./Date/api.sol";
 
 contract H2ICO is StandardToken {
+
+    
+    struct Date {
+        uint8 month;
+        uint16 year;
+    }
+
     string private name = "H2ICO";
     string private symbol = "kl";
     uint8 private decimals = 3;
@@ -10,6 +19,7 @@ contract H2ICO is StandardToken {
     address private owner;
     uint private userCounter =0;
     uint private userWaterLimit;
+    DateTime date = new DateTime();//on main network call actual contract
     
     mapping (address=>bool) validatingMap;
     mapping (address => uint) lastPurchaseDate;
@@ -64,6 +74,14 @@ contract H2ICO is StandardToken {
     function removeUser(address _user)public isOwner {
         validatingMap[_user] = false;
         userCounter--;
+    }
+
+    function getDate() public view returns(Date) {
+        Date memory rtrDate;
+        uint timeStamp = now;
+        rtrDate.month = date.getMonth(timeStamp);
+        rtrDate.year = date.getYear(timeStamp);
+        return rtrDate;
     }
 
 }

@@ -1,6 +1,8 @@
 import "truffle/Assert.sol";
 import "truffle/DeployedAddresses.sol";
 import "../contracts/H2ICO.sol";
+import "../contracts/Date/DateTime.sol";
+import "../contracts/Date/api.sol";
 
 contract TestUserInteractions {
  
@@ -28,10 +30,15 @@ contract TestUserInteractions {
 
  
   function testAddUser() public {
-      uint firstIndex = 0;
-      uint secondIndex = 1;
-      Assert.equal(token.getUser(firstIndex),firstAddress,"Index 0 should be the first address");
-      Assert.equal(token.getUser(secondIndex),secondAddress,"Index 1 should be the second address");
+     
+      Assert.equal(token.containsUser(firstAddress),true,"User 1 should be registerd");
+      Assert.equal(token.containsUser(secondAddress),true,"User 2 should be registerd");
+      Assert.equal(token.containsUser(thirdAddress),true,"User 3 should be registerd");
+      Assert.equal(token.containsUser(forthAddress),true,"User 4 should be registerd");
+      Assert.equal(token.containsUser(fithAddress),true,"User should not be registerd");
+      Assert.equal(token.containsUser(0x01020),false,"User should not be registerd");
+
+      
   }
   function testRemoveUser() public {
       Assert.equal(token.containsUser(firstAddress),true,"First address should be in User List");
@@ -44,13 +51,6 @@ contract TestUserInteractions {
       Assert.equal(token.getTotalUsers(),5,"There should be 5 users");
   }
 
-  function testDistrubute() public {
-      uint supplyAmount = 20000;
-      token.setSupply(supplyAmount);
-
-      Assert.equal(token.balanceOf(firstAddress),4000,"Tokens should be the total supply over total amount");
-      Assert.equal(token.balanceOf(firstAddress),token.balanceOf(secondAddress),"Tokens should be dvided equally");
-
-  }
+ 
 
 }

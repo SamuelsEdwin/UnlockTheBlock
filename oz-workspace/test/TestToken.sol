@@ -3,6 +3,8 @@ pragma solidity ^0.4.17;
 import "truffle/Assert.sol";
 import "truffle/DeployedAddresses.sol";
 import "../contracts/H2ICO.sol";
+import "../contracts/Date/DateTime.sol";
+import "../contracts/Date/api.sol";
 
 contract TestToken {
  
@@ -10,7 +12,7 @@ contract TestToken {
 
   // Testing the adopt() function
   function testOwnerHasInitialValue() public {
-      uint expected = 12000;
+      uint expected = 0;
       Assert.equal(token.totalSupply(),expected,"Owner Should have 0 tokens");
     }
   
