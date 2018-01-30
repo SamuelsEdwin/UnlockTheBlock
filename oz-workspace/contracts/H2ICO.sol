@@ -6,13 +6,13 @@ contract H2ICO is StandardToken {
     string private name = "H2ICO";
     string private symbol = "kl";
     uint8 private decimals = 3;
-    uint private INITIAL_SUPPLY = 12000;
+    uint private INITIAL_SUPPLY = 0;
     address private owner;
-    uint private lengthCounter =0;
+    uint private userCounter =0;
+    uint private userWaterLimit;
     
-    address[] users;
-
     mapping (address=>bool) validatingMap;
+    mapping (address => uint) lastPurchaseDate;
     
      modifier isOwner {
         if (msg.sender == owner) {
@@ -24,6 +24,7 @@ contract H2ICO is StandardToken {
         totalSupply_ = INITIAL_SUPPLY;
         balances[msg.sender] = INITIAL_SUPPLY;
         owner = msg.sender;
+        userWaterLimit = 0;
     }
 
     function increasedSupply (uint _amount) public isOwner returns(uint) {
@@ -38,31 +39,31 @@ contract H2ICO is StandardToken {
         totalSupply_ = _amount;
         
     }
+    function setUserWaterLimit(uint _limit) public isOwner {
+        userWaterLimit = _limit;
+    }
 
     function addUser(address _user)  public isOwner {
-        users.push(_user);
+        
         validatingMap[_user] = true;
-        lengthCounter++;
+        userCounter++;
     }
     function getTotalUsers() public constant returns (uint) {
-        return lengthCounter;  
+        return userCounter;  
     }
-    function distribute() public isOwner {
-        uint arrayLength = getTotalUsers();
-        for (uint index = 0;index<arrayLength;index++) {
-            transferFrom(owner, users[index], uint(balances[msg.sender])/uint(arrayLength));
-        }
+    function withdraw(address _user) public isOwner {
+        require(validatingMap[_user]);
+        transferFrom(owner, _user, userWaterLimit);
+
     }
-    function getUser(uint _index) public view returns (address) {
-        return users[_index];
-    }
+   
     function containsUser(address _user) public view returns(bool) {
         return validatingMap[_user];
         
     }
     function removeUser(address _user)public isOwner {
         validatingMap[_user] = false;
-        lengthCounter--;
+        userCounter--;
     }
 
 }
