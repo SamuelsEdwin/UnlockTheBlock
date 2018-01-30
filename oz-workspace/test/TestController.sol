@@ -12,6 +12,7 @@ contract TestController {
     // Initialise controller for testing
     Controller controller = new Controller();
 
+
     // Use ganache test addresses for testing purposes
     address firstAddress ;
     address secondAddress;
@@ -31,6 +32,7 @@ contract TestController {
         controller.addUser(thirdAddress);
         controller.addUser(fourthAddress);
         controller.addUser(fifthAddress);
+        controller.generateToken();
     }
 
     function testInitialValues() public {
@@ -69,5 +71,6 @@ contract TestController {
     function testWithdraw () public {
         //Assert.equal(controller.withdraw(), true, "Withdrew");
         Assert.equal(controller.getBalance(firstAddress), 432433465768790876545340, "The address should be 0");
+
     }
 }
