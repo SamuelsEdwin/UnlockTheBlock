@@ -25,15 +25,6 @@ contract('controller',function(accounts) {
         assert.equal(noUser,false,"User not removed");
     });
 
-    it("should withdraw Tokens", async function() {
-        await control.addUser(accounts[1]);
-        await control.setUserWaterLimit(80);
-        await control.withdraw({from: accounts[1]});
-        const balance0 = await control.getBalance(accounts[1]);
-        assert.equal(balance0.toNumber(), 80, "Balance was updated")
-    });
-
-
     // it ("should have a water limit of 80",function(){
     //     return controller.deployed().then(function(instance){
     //          instance.generateToken();
@@ -61,19 +52,40 @@ contract('controller',function(accounts) {
         assert.equal(80,get.toNumber(),"80 wasn't the water limit")
     });
 
-    it ("should exchange tokens", async () => {
-        let get
-        await control.setUserWaterLimit(100, {from: accounts[0]});
+    // it ("should exchange tokens", async () => {
+    //     let get
+    //     await control.setUserWaterLimit(100, {from: accounts[0]});
+    //     await control.addUser(accounts[1]);
+    //     await control.addUser(accounts[2]);
+    //     await control.withdraw({from:accounts[1]});
+    //     const balance = await control.getBalance(accounts[1]);
+    //     assert.equal(100, balance.toNumber(), "Withdrawal unsuccessful");
+    //     await control.exchange(accounts[1], accounts[2], 100);
+    //     const balanceOne = await control.getBalance(accounts[2]);
+    //     //assert.equal(95,balanceOne.toNumber(),"Incorrectly exchanged");
+    //     const balanceTwo = await control.getBalance(accounts[1]);
+    //     assert.equal(0, balanceTwo.toNumber(),"Balance not reduced")
+    // });
+
+    it ("should return the correct number of users", async () => {
         await control.addUser(accounts[1]);
         await control.addUser(accounts[2]);
-        await control.withdraw({from:accounts[1]});
-        const balance = await control.getBalance(accounts[1]);
-        assert.equal(100, balance.toNumber(), "Withdrawal unsuccessful");
-        await control.exchange(accounts[1], accounts[2], 100);
-        const balanceOne = await control.getBalance(accounts[2]);
-        //assert.equal(95,balanceOne.toNumber(),"Incorrectly exchanged");
-        const balanceTwo = await control.getBalance(accounts[1]);
-        assert.equal(0, balanceTwo.toNumber(),"Balance not reduced")
+        const addUserCount = await control.getTotalUsers();
+        assert.equal(2,addUserCount.toNumber(),"Incorrect Number of users recorded");
+        await control.removeUser(accounts[2]);
+        const rmUserCount = await control.getTotalUsers();
+        assert.equal(1,rmUserCount.toNumber(),"Incorrect Number of users after remove")
+    });
+
+    it("should withdraw Tokens", async function() {
+        await control.addUser(accounts[1]);
+        await control.setUserWaterLimit(80);
+        await control.withdraw({from: accounts[1]});
+        const balance0 = await control.getBalance(accounts[1]);
+        assert.equal(balance0.toNumber(), 80, "Balance was not withdrawn");
+        await control.withdraw({from: accounts[1]});
+        const balance1 = await control.getBalance(accounts[1]);
+        assert.equal(balance1.toNumber(), 80, "Balance was withdrawn twice")
     });
 
 });
