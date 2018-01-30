@@ -6,7 +6,7 @@ import "../contracts/H2ICO.sol";
 import "../contracts/Date/DateTime.sol";
 import "../contracts/Date/DateTimeAPI.sol";
 
-contract TestToken {
+contract TestH2ICO {
  
   H2ICO token = new H2ICO();
 

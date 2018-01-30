@@ -93,7 +93,6 @@ contract Controller {
    */
     function exchange(address _from, address _to, uint256 _value) public  {
         token.exchange(_from,_to,_value,5);//todo 5==burn rate change to dynamic burn rate.
-
     }
 
     
@@ -154,13 +153,12 @@ contract Controller {
         
     }
 
-
     /**
     * Description   Function allowing the owner of the contract to remove users from the mapping of
     *               valid users and reduces the number of users registered
     * Param _user   Address of the user that is to be removed from the network
     */
-    function removeUser(address _user)public isOwner {
+    function removeUser(address _user) public isOwner {
         validatingMap[_user] = false;
         userCounter--;
     }
@@ -175,5 +173,9 @@ contract Controller {
     //     rtrDate.year = date.getYear(_timeStamp);
     //     return rtrDate;
     // }
+
+    function getBalance (address _user) public view returns (uint256){
+        return token.balanceOf(_user);
+    }
 
 }
