@@ -74,6 +74,7 @@ event Mint(address indexed to, uint256 amount);
    * Param _amount The amount of tokens to mint.
    * return A boolean that indicates if the operation was successful.
    */
+/*
   function mint(address _to, uint256 _amount) canMint private returns (bool) {
     totalSupply_ = totalSupply_.add(_amount);
     balances[_to] = balances[_to].add(_amount);
@@ -86,6 +87,7 @@ event Mint(address indexed to, uint256 amount);
    * Description Function to stop minting new tokens.
    * return True if the operation was successful.
    */
+/*
   function finishMinting() canMint private returns (bool) {
     mintingFinished = true;
     MintFinished();
