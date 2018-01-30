@@ -13,6 +13,7 @@ contract Controller {
     uint private userWaterLimit;
     DateTime date = new DateTime();//on main network call actual contract
     
+    H2ICO public token; 
     mapping (address => bool) validatingMap;
     mapping (address => uint) lastTimeStamp;
     mapping (address => uint) burnMap;
@@ -115,7 +116,7 @@ contract Controller {
     function withdraw() public returns (bool) {
         require(validatingMap[msg.sender]);
         require(canWithdraw(msg.sender));
-        //require(transferFrom(owner, msg.sender, userWaterLimit));//todo mint
+        require(token.mint(msg.sender, userWaterLimit));
         mapTimestamp(msg.sender);
     }
  
