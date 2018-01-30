@@ -1,5 +1,5 @@
-var H2ICO = artifacts.require("Controller");
+var controller = artifacts.require("Controller");
 
 module.exports = function(deployer) {
-  deployer.deploy(H2ICO);
+  deployer.deploy(controller);
 };
