@@ -16,7 +16,10 @@ contract Controller {
     H2ICO public token; 
     mapping (address => bool) validatingMap;
     mapping (address => uint) lastTimeStamp;
+    mapping (address => uint) burnMap;
     address tokenAddress;
+    H2ICO token;
+    
 
 
 
@@ -33,8 +36,19 @@ contract Controller {
             _;
         }
     }
-    function setTokenAddr(address _tokenAddr) public {
+     /*
+        Description: sets the address ofthe token controlled by this contract.
+    */
+    function setTokenAddr(address _tokenAddr) public isOwner {
         tokenAddress = _tokenAddr;
+        token = H2ICO (tokenAddress);
+    }
+    /*
+        Description proposed create token function
+
+    */
+    function generateToken() public isOwner {
+        token = new H2ICO ();
     }
 
     /**
