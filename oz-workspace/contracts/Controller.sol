@@ -13,6 +13,22 @@ contract Controller {
     
     mapping (address => bool) validatingMap;
     mapping (address => uint) lastPurchaseDate;
+
+
+    function Controller () public {
+        userWaterLimit = 0;
+        owner = msg.sender;
+    }
+        /*
+        Description: Modifier to be used to ensure the sender is in fact the owner
+        continues if true, stops executing if false
+    */
+     modifier isOwner {
+        if (msg.sender == owner) {
+            _;
+        }
+    }
+
 /**
     * Description Function allowing the owner only to set the water limit per user per month
     * Param _limit The amount that will be allocated to userWaterLimit for each user
@@ -51,11 +67,12 @@ contract Controller {
     * returns       Returns a boolean if the transaction was successful
     */
 
+/* Needs to be modified to work with Tokens
     function withdraw() public returns (bool) {
         require(validatingMap[msg.sender]);
         return transferFrom(owner, msg.sender, userWaterLimit);
     }
-   
+/* 
 
     /**
     * Description    Function confirming whether a user is a valid user in the network

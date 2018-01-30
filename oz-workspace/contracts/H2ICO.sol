@@ -1,6 +1,6 @@
 pragma solidity ^0.4.17;
 
-import "zeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
+import "zeppelin-solidity/contracts/token/ERC20/MintableToken.sol";
 import "./Date/DateTime.sol";
 import "./Date/DateTimeAPI.sol";
 
@@ -17,17 +17,6 @@ contract H2ICO is MintableToken {
     uint private INITIAL_SUPPLY = 0;
     address private owner;
 
-    
-    /*
-        Description: Modifier to be used to ensure the sender is in fact the owner
-        continues if true, stops executing if false
-    */
-     modifier isOwner {
-        if (msg.sender == owner) {
-            _;
-        }
-    }
-
     /*
         Description: Constructor for Token, generates a token with total supply of 0
         and makes the deployer/issuer of the contract the owner.
@@ -37,7 +26,6 @@ contract H2ICO is MintableToken {
         totalSupply_ = INITIAL_SUPPLY;
         balances[msg.sender] = INITIAL_SUPPLY;
         owner = msg.sender;
-        userWaterLimit = 0;
     }
 
 /*
