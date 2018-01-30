@@ -75,12 +75,15 @@ contract H2ICO is StandardToken {
         validatingMap[_user] = false;
         userCounter--;
     }
-
-    function getDate() public view returns(Date) {
+    /**
+         Description returns the date for a given time stamp
+        `param the time for given timestamp, preferably using the now keyword
+         returns a Date struct consisting of the date and month
+     */
+    function getDate(uint _timeStamp) public view returns(Date) {
         Date memory rtrDate;
-        uint timeStamp = now;
-        rtrDate.month = date.getMonth(timeStamp);
-        rtrDate.year = date.getYear(timeStamp);
+        rtrDate.month = date.getMonth(_timeStamp);
+        rtrDate.year = date.getYear(_timeStamp);
         return rtrDate;
     }
 
