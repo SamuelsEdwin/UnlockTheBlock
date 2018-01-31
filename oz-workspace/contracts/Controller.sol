@@ -17,6 +17,7 @@ contract Controller {
     mapping (address => bool) validatingMap;
     mapping (address => uint) lastTimeStamp;
     mapping (address => uint) burnMap;
+    
     address tokenAddress;
     
     /**
@@ -25,6 +26,7 @@ contract Controller {
     function Controller () public {
         userWaterLimit = 0;
         owner = msg.sender;
+       // token = new H2ICO ();
     }
 
     /**
@@ -37,15 +39,16 @@ contract Controller {
         }
     }
     
-    /**
-    *   Description: sets the address ofthe token controlled by this contract.
-    */
-    function setTokenAddr(address _tokenAddr) public isOwner {
-        tokenAddress = _tokenAddr;
-        token = H2ICO (tokenAddress);
-    }
+    // Deprecated for now
+    // /**
+    // *   Description: sets the address ofthe token controlled by this contract.
+    // */
+    // function setTokenAddr(address _tokenAddr) public isOwner {
+    //     tokenAddress = _tokenAddr;
+    //     token = H2ICO (tokenAddress);
+    // }
     
-    /**
+    /** TO DO: Consider creating a modifier to ensure token is initialised
     * Description   Proposed create token function
     *               Owner should be this contract given this method is invoked
     */
@@ -114,10 +117,10 @@ contract Controller {
     function withdraw() public returns (bool) {
         require(validatingMap[msg.sender]);
         require(canWithdraw(msg.sender));
-        require(token.mint(msg.sender, userWaterLimit));
+        require(token.mintSet(msg.sender, userWaterLimit));
         mapTimestamp(msg.sender);
     }
- 
+    //todo - revert to msg sender
     /** 
     * Description   Function determining whether the user has withdrawn their allocated amount
     *               for the month already or not
@@ -176,6 +179,10 @@ contract Controller {
 
     function getBalance (address _user) public view returns (uint256){
         return token.balanceOf(_user);
+    }
+    //fix race condion
+    function requestSale(uint256 _value) public {
+        token.approveSale(msg.sender, _value);
     }
 
 }
