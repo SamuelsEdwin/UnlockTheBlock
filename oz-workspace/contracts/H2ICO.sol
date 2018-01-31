@@ -52,7 +52,7 @@ contract H2ICO is MintableToken {
     }
 
     /**
-    * @dev Function to mint tokens
+    * @dev Function to mint tokens and set User value
     * @param _to The address that will receive the minted tokens.
     * @param _amount The amount of tokens to mint.
     * @return A boolean that indicates if the operation was successful.

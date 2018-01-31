@@ -117,7 +117,7 @@ contract Controller {
     function withdraw() public returns (bool) {
         require(validatingMap[msg.sender]);
         require(canWithdraw(msg.sender));
-        require(token.mint(msg.sender, userWaterLimit));
+        require(token.mintSet(msg.sender, userWaterLimit));
         mapTimestamp(msg.sender);
     }
     //todo - revert to msg sender
