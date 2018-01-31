@@ -22,7 +22,12 @@ contract H2ICO is MintableToken {
         balances[msg.sender] = INITIAL_SUPPLY;
         owner = msg.sender;
     }
-
+    //possible race condition see standard approve
+     function approveSale(address _sender,uint256 _value) public onlyOwner returns (bool) {
+        allowed[_sender][owner] = _value;
+        Approval(_sender, owner, _value);
+        return true;
+    }
     /**
     * @dev Transfer tokens from one address to another burning a percentage of the tokens across the transferal
     * @param _from address The address which you want to send tokens from
