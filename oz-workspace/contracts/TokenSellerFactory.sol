@@ -22,9 +22,16 @@ contract TokenSellerFactory is Ownable {
 
     event TradeListing(address indexed ownerAddress, address indexed tokenSellerAddress,address indexed asset, uint256 sellPrice, uint256 units, bool sellsTokens);
     event OwnerWithdrewERC20Token(address indexed tokenAddress, uint256 tokens);
-
+    address constant TOKEN_ADDRESS;
     mapping (address => bool) _verify;      //mapping to verify address has a smart contract made by factory
-
+    
+    /** @dev Constructor method
+     *  @param _tokenAddress address Address of the token to be generated for contracts 
+     */
+    function TokenSellerFactory(address _tokenAddress) public {
+        require(token != 0x0);
+        TOKEN_ADDRESS = _tokenAddress;
+    }
     /** Verify Token Seller Contracts
      * Function is called to verify the parameters of a deployed TokenSeller contract
      * @param tradeContract address of contract to be verified
@@ -56,16 +63,14 @@ contract TokenSellerFactory is Ownable {
      *    sellPrice       170
      *    units           100000
      *    sellsTokens     true
-     * @param token address of token to be traded
      * @param sellPrice price of lot for sale
      * @param units size of a lot
      * @param sellsTokens check if the contract has permission to sell
      */
-    function createSaleContract(address token, uint sellPrice, uint units, bool sellsTokens) public returns (address seller) {
-        require(token != 0x0);
+    function createSaleContract(uint sellPrice, uint units, bool sellsTokens) public returns (address seller) {
         require(sellPrice >= 0);
         require(units >= 0);
-        seller = new TokenSeller(token, sellPrice, units, sellsTokens);
+        seller = new TokenSeller(TOKEN_ADDRESS, sellPrice, units, sellsTokens);
         _verify[seller] = true;
         TokenSeller(seller).transferOwnership(msg.sender);
         TradeListing(msg.sender, seller, token, sellPrice, units, sellsTokens);
