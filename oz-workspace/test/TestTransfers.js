@@ -1,13 +1,20 @@
 var controller = artifacts.require("Controller");
+var H2ICO = artifacts.require("H2ICO");
 
 contract('controller',function(accounts) {
 
     let control;
     let token;
+    let tokenAddress;
+    let controllerAddress;
 
     beforeEach(async () => {
-        control = await controller.new();
-        token = control.generateToken();
+        token = await H2ICO.new();
+        tokenAddress = await token.address;
+        control = await controller.new(tokenAddress);
+        controllerAddress = await controller.address;
+        await token.transferOwnership(controllerAddress,{from: accounts[0]});
+        //token = control.generateToken();
       
     });
 
@@ -84,6 +91,8 @@ contract('controller',function(accounts) {
         await control.withdraw({from:accounts[1]});
         const balance = await control.getBalance(accounts[1]);
         assert.equal(100, balance.toNumber(), "Withdrawal unsuccessful");
+
+
         control.requestSale(100,{from: accounts[1]});
         await control.exchange(accounts[1], accounts[2], 100);
         const balanceOne = await control.getBalance(accounts[2]);
@@ -118,6 +127,7 @@ contract('controller',function(accounts) {
         await control.withdraw({from: accounts[1]});
         const balance1 = await control.getBalance(accounts[1]);
         assert.equal(balance1.toNumber(), 80, "Balance was withdrawn twice")
+       
     });
 
 });
