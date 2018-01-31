@@ -163,7 +163,7 @@ App = {
 
        //pull value off of UI element
        //CAN TAKE THIS VALUE IN AS A STRING AS WEB3 WILL AUTOMATICALLY CAST TO ADDRESS
-      var User = $('#removeUserTextBox').val();
+      var ValidatedUser = $('#removeUserTextBox').val();
   
        //get an instance of the contract
       var controllerInstance;
@@ -171,7 +171,7 @@ App = {
       controllerInstance = instance;
 
       // Execute removeUser
-      return controllerInstance.removeUser(User, {from: account});
+      return controllerInstance.removeUser(ValidatedUser, {from: account});
       }).then(async function(result) {
         console.log(result);
 
@@ -190,23 +190,34 @@ App = {
   /**Allow users to draw their monthly allocation of tokens */
   handleWithDrawTokens :function(event){
     event.preventDefault();
-
-    //get account 0
+    //get the account in order to be able to execute function on the blockchain
+    //in particular access account[0]
     web3.eth.getAccounts(function(error, accounts) {
-      if (error) {
+    if (error) {
         console.log(error);
-      }
-      var account = accounts[0];
+    }
+    var account = accounts[0];
 
-      App.contracts.Controller.deployed().then(function(instance) {
-        ControllerInstance = instance;
+    //get an instance of the contract
+    var controllerInstance;
+    App.contracts.Controller.deployed().then(function(instance) {
+      controllerInstance = instance;
 
-        return ControllerInstance.withdraw({from: account});
-      }).then(function(result) {
+    // Execute function on smart contract
+    console.log("calling withdraw");
+      return controllerInstance.withdraw({from: account});
+      }).then(async function(result) {
+       
         console.log(result);
+          const newWaterLimit = await App.getWaterLimit();
+          console.log("new water limit" + newWaterLimit);
+          App.displayWaterLimit(newWaterLimit);
+      
+        
+    
       }).catch(function(err) {
         console.log(err.message);
-      });
+       });
     });
 
   },
@@ -357,6 +368,7 @@ App = {
 
     }).then(function(result) {
 
+      console.log(result);
       //App.displayWater = result.c[0]; 
       //console.log("this is display water"+ App.displayWater);
       return result.c[0];
