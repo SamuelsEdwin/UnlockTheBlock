@@ -17,13 +17,34 @@ contract('controller',function(accounts) {
         assert.equal(user,true,"User not added")
     });
 
+    it("should fail to add user twice", async function() {
+        await control.addUser(accounts[1]);
+        const user = await control.getTotalUsers();
+        assert.equal(user,1,"User not added");
+        await control.addUser(accounts[1]);
+        const user2 = await control.getTotalUsers();
+        assert.equal(user2,1,"User added Twice")
+    });
+
     it("should remove user", async function() {
         await control.addUser(accounts[1]);
         const user = await control.containsUser(accounts[1]);
         assert.equal(user,true,"User not added")
         await control.removeUser(accounts[1]);
         const noUser = await control.containsUser(accounts[1]);
-        assert.equal(noUser,false,"User not removed");
+        assert.equal(noUser,false,"User not removed")
+    });
+
+    it("should fail to remove non-user", async function() {
+        await control.addUser(accounts[1]);
+        const user0 = await control.getTotalUsers();
+        assert.equal(user0,1,"User not added");
+        await control.removeUser(accounts[1]);
+        const user1 = await control.getTotalUsers();
+        assert.equal(user1,0,"User not removed");
+        await control.removeUser(accounts[1]);
+        const user2 = await control.getTotalUsers();
+        assert.equal(user2,0,"User removed twice")
     });
 
     // it ("should have a water limit of 80",function(){
@@ -64,17 +85,19 @@ contract('controller',function(accounts) {
         const balance = await control.getBalance(accounts[1]);
         assert.equal(100, balance.toNumber(), "Withdrawal unsuccessful");
         control.requestSale(100,{from: accounts[1]});
-        await control.exchange(accounts[1], accounts[2], 100);
+        await control.pay(accounts[1], accounts[2], 100);
         const balanceOne = await control.getBalance(accounts[2]);
-        assert.equal(95,balanceOne.toNumber(),"Incorrectly exchanged");
+        assert.equal(100,balanceOne.toNumber(),"Incorrectly exchanged");
         const balanceTwo = await control.getBalance(accounts[1]);
         assert.equal(0, balanceTwo.toNumber(),"Balance not reduced")
 
+        
 
-        //test to get lost water
-        await control.exchange(accounts[1], accounts[2], 5);
-        const balanceThree = await control.getBalance(accounts[2]);
-        assert.equal(95,balanceThree.toNumber(),"incorrectly got burnt water ");
+        // Test for?
+        // //test to get lost water
+        // await control.pay(accounts[1], accounts[2], 5);
+        // const balanceThree = await control.getBalance(accounts[2]);
+        // assert.equal(100,balanceThree.toNumber(),"incorrectly got burnt water ");
 
     });
 

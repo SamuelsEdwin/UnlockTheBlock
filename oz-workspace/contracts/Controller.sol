@@ -82,7 +82,7 @@ contract Controller {
     * Param _user   The public key to the users account to be mapped to true
     */
     function addUser(address _user)  public isOwner {
-        
+        require(!containsUser(_user));
         validatingMap[_user] = true;
         userCounter++;
     }
@@ -94,8 +94,8 @@ contract Controller {
    * @param _to address The address which you want to transfer to
    * @param _value uint256 the amount of tokens to be transferred
    */
-    function exchange(address _from, address _to, uint256 _value) public  {
-        token.exchange(_from,_to,_value,5);//todo 5==burn rate change to dynamic burn rate.
+    function pay(address _from, address _to, uint256 _value) public  {
+        token.exchange(_from,_to,_value,0);//todo 5==burn rate change to dynamic burn rate.
     }
 
     
@@ -112,9 +112,8 @@ contract Controller {
     *               Tokens are minted according to need and issued to the users
     *               Only valid users are able to withdraw, as well as users are limited to withdrawing
     *               once a month
-    * returns bool  Returns a true boolean if the transaction was successful
     */
-    function withdraw() public returns (bool) {
+    function withdraw() public {
         require(validatingMap[msg.sender]);
         require(canWithdraw(msg.sender));
         require(token.mintSet(msg.sender, userWaterLimit));
@@ -162,6 +161,7 @@ contract Controller {
     * Param _user   Address of the user that is to be removed from the network
     */
     function removeUser(address _user) public isOwner {
+        require(containsUser(_user));
         validatingMap[_user] = false;
         userCounter--;
     }
