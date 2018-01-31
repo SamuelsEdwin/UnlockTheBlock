@@ -84,17 +84,19 @@ contract('controller',function(accounts) {
         const balance = await control.getBalance(accounts[1]);
         assert.equal(100, balance.toNumber(), "Withdrawal unsuccessful");
         control.requestSale(100,{from: accounts[1]});
-        await control.exchange(accounts[1], accounts[2], 100);
+        await control.pay(accounts[1], accounts[2], 100);
         const balanceOne = await control.getBalance(accounts[2]);
-        assert.equal(95,balanceOne.toNumber(),"Incorrectly exchanged");
+        assert.equal(100,balanceOne.toNumber(),"Incorrectly exchanged");
         const balanceTwo = await control.getBalance(accounts[1]);
         assert.equal(0, balanceTwo.toNumber(),"Balance not reduced")
 
+        
 
-        //test to get lost water
-        await control.exchange(accounts[1], accounts[2], 5);
-        const balanceThree = await control.getBalance(accounts[2]);
-        assert.equal(95,balanceThree.toNumber(),"incorrectly got burnt water ");
+        // Test for?
+        // //test to get lost water
+        // await control.pay(accounts[1], accounts[2], 5);
+        // const balanceThree = await control.getBalance(accounts[2]);
+        // assert.equal(100,balanceThree.toNumber(),"incorrectly got burnt water ");
 
     });
 

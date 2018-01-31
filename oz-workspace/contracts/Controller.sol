@@ -94,8 +94,8 @@ contract Controller {
    * @param _to address The address which you want to transfer to
    * @param _value uint256 the amount of tokens to be transferred
    */
-    function exchange(address _from, address _to, uint256 _value) public  {
-        token.exchange(_from,_to,_value,5);//todo 5==burn rate change to dynamic burn rate.
+    function pay(address _from, address _to, uint256 _value) public  {
+        token.exchange(_from,_to,_value,0);//todo 5==burn rate change to dynamic burn rate.
     }
 
     
@@ -134,9 +134,6 @@ contract Controller {
         return lastTimeStamp[_user]<currentTimestamp;
     }
 
-
-    function pay(address _meter, uint value) public returns(bool) {
-    }
     /** 
     * Description   Function updating the timestamp associated with a users most recent withdrawal
     * Params _user  The public address of the user we are updating
