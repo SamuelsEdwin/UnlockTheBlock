@@ -43,10 +43,10 @@ contract Controller {
     // /**
     // *   Description: sets the address ofthe token controlled by this contract.
     // */
-    // function setTokenAddr(address _tokenAddr) public isOwner {
-    //     tokenAddress = _tokenAddr;
-    //     token = H2ICO (tokenAddress);
-    // }
+    function setTokenAddr(address _tokenAddr) public isOwner {
+        tokenAddress = _tokenAddr;
+        token = H2ICO (tokenAddress);
+    }
     
     /** TO DO: Consider creating a modifier to ensure token is initialised
     * Description   Proposed create token function
