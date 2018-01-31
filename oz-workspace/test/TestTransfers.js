@@ -52,20 +52,30 @@ contract('controller',function(accounts) {
         assert.equal(80,get.toNumber(),"80 wasn't the water limit")
     });
 
-    // it ("should exchange tokens", async () => {
-    //     let get
-    //     await control.setUserWaterLimit(100, {from: accounts[0]});
-    //     await control.addUser(accounts[1]);
-    //     await control.addUser(accounts[2]);
-    //     await control.withdraw({from:accounts[1]});
-    //     const balance = await control.getBalance(accounts[1]);
-    //     assert.equal(100, balance.toNumber(), "Withdrawal unsuccessful");
-    //     await control.exchange(accounts[1], accounts[2], 100);
-    //     const balanceOne = await control.getBalance(accounts[2]);
-    //     //assert.equal(95,balanceOne.toNumber(),"Incorrectly exchanged");
-    //     const balanceTwo = await control.getBalance(accounts[1]);
-    //     assert.equal(0, balanceTwo.toNumber(),"Balance not reduced")
-    // });
+    it ("should exchange tokens", async () => {
+        let get
+
+        //test if exchange works under normal conditions
+        await control.setUserWaterLimit(100, {from: accounts[0]});
+        await control.addUser(accounts[1]);
+        await control.addUser(accounts[2]);
+        await control.withdraw({from:accounts[1]});
+        const balance = await control.getBalance(accounts[1]);
+        assert.equal(100, balance.toNumber(), "Withdrawal unsuccessful");
+        control.requestSale(100,{from: accounts[1]});
+        await control.exchange(accounts[1], accounts[2], 100);
+        const balanceOne = await control.getBalance(accounts[2]);
+        assert.equal(95,balanceOne.toNumber(),"Incorrectly exchanged");
+        const balanceTwo = await control.getBalance(accounts[1]);
+        assert.equal(0, balanceTwo.toNumber(),"Balance not reduced")
+
+
+        //test to get lost water
+        await control.exchange(accounts[1], accounts[2], 5);
+        const balanceOne = await control.getBalance(accounts[2]);
+        assert.equal(95,balanceOne.toNumber(),"incorrectly got burnt water ");
+
+    });
 
     it ("should return the correct number of users", async () => {
         await control.addUser(accounts[1]);

@@ -17,6 +17,7 @@ contract Controller {
     mapping (address => bool) validatingMap;
     mapping (address => uint) lastTimeStamp;
     mapping (address => uint) burnMap;
+    
     address tokenAddress;
     
     /**
