@@ -91,11 +91,11 @@ contract('controller',function(accounts) {
         const balanceTwo = await control.getBalance(accounts[1]);
         assert.equal(0, balanceTwo.toNumber(),"Balance not reduced")
 
-
+        // Test for?
         //test to get lost water
-        await control.exchange(accounts[1], accounts[2], 5);
-        const balanceThree = await control.getBalance(accounts[2]);
-        assert.equal(95,balanceThree.toNumber(),"incorrectly got burnt water ");
+        // await control.exchange(accounts[1], accounts[2], 5);
+        // const balanceThree = await control.getBalance(accounts[2]);
+        // assert.equal(95,balanceThree.toNumber(),"incorrectly got burnt water ");
 
     });
 
