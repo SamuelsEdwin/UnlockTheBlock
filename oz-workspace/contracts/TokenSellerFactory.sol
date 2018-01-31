@@ -22,14 +22,14 @@ contract TokenSellerFactory is Ownable {
 
     event TradeListing(address indexed ownerAddress, address indexed tokenSellerAddress,address indexed asset, uint256 sellPrice, uint256 units, bool sellsTokens);
     event OwnerWithdrewERC20Token(address indexed tokenAddress, uint256 tokens);
-    address constant TOKEN_ADDRESS;
+    address public TOKEN_ADDRESS;
     mapping (address => bool) _verify;      //mapping to verify address has a smart contract made by factory
     
     /** @dev Constructor method
      *  @param _tokenAddress address Address of the token to be generated for contracts 
      */
     function TokenSellerFactory(address _tokenAddress) public {
-        require(token != 0x0);
+        require(_tokenAddress != 0x0);
         TOKEN_ADDRESS = _tokenAddress;
     }
     /** Verify Token Seller Contracts
@@ -73,7 +73,7 @@ contract TokenSellerFactory is Ownable {
         seller = new TokenSeller(TOKEN_ADDRESS, sellPrice, units, sellsTokens);
         _verify[seller] = true;
         TokenSeller(seller).transferOwnership(msg.sender);
-        TradeListing(msg.sender, seller, token, sellPrice, units, sellsTokens);
+        TradeListing(msg.sender, seller, TOKEN_ADDRESS, sellPrice, units, sellsTokens);
     }
 
     /** Withdraw any ECR20 token from factory 
