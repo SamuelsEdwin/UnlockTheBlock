@@ -8,19 +8,27 @@ contract('TokenSeller',function(accounts) {
     let mToken;
     //TokenSeller(address _asset, uint _sellPrice, uint _units, bool _sellsTokens)
     let asset;
+    let tokenSellerAddress;
     var sellPrice;//sell price in ether for lot
     var units;
     var sellsTokens;
     var otherAsset;
-    
+    let mControl
     beforeEach(async () => {
         mToken = await Token.new();
         asset = await mToken.address;
+
+        
         sellPrice = 2;
         units = 50;
         sellsTokens = true;
         
         mTokenSeller = await TokenSeller.new(asset, sellPrice, units, sellsTokens);
+        tokenSellerAddress = await mTokenSeller.address;
+        //mControl = await Controller.new();
+        //await  mControl.setTokenAddr(asset);
+        //await mControl.setUserWaterLimit(units,{from: accounts[0]});
+        //await mControl.withdraw({from: tokenSellerAddress});
     });
 
     it("All variables should be equal to the values past in by the constructor", async function() {
@@ -37,7 +45,7 @@ contract('TokenSeller',function(accounts) {
         //false checks
         
         // assert.notEqual(mTokenSeller.sellsTokens,false,"Should not sell tokens");
-        // assert.notEqual(mTokenSeller.units,units-1,"units should not match  constructor parameter");
+        assert.notEqual(mUnits,units-1,"units should not match  constructor parameter");
         // assert.notEqual(mTokenSeller.sellPrice,sellPrice+1,"sellPrice should not match  constructor parameter");
         assert.notEqual(mAsset,accounts[1],"asset should not match token address in  constructor parameter");
 
@@ -45,6 +53,44 @@ contract('TokenSeller',function(accounts) {
 
         
         
+    });
+
+    it("All active sellers set to false", async function() {
+        let set;
+        set = await mTokenSeller.activate(false);
+        let get;
+        get = await mTokenSeller.sellsTokens();
+
+        assert.equal(false,get.valueOf(),"Should be false");
+        assert.notEqual(true,get.valueOf(),"Should not be true");
+        
+    });
+
+    it("All active sellers set to true", async function() {
+        let set;
+        set = await mTokenSeller.activate(true);
+        let get;
+        get = await mTokenSeller.sellsTokens();
+
+        assert.equal(true,get.valueOf(),"Should be true");
+        assert.notEqual(false,get.valueOf(),"Should not be false");
+        
+    });
+
+    // function makerWithdrawAsset(uint tokens) public onlyOwner returns (bool confirm) {
+       
+       it("makerWithdraw", async function() {
+        var withdrawAmount = 5;
+        let get;
+        get = await mTokenSeller.makerWithdrawAsset(withdrawAmount,{from: accounts[0]});
+        
+        let mTokenSellerBalance;
+        mTokenSellerBalance = await mToken.balanceOf(tokenSellerAddress);
+
+        let mUnits;
+        mUnits = await mTokenSeller.units();
+        assert.equal(mUnits.toNumber(),mTokenSellerBalance.toNumber(),"asset should be 'withdrawAmount' less" );
+        //assert.notEqual(mUnits.toNumber(),units,"asset should not be unchanged");
     });
 
 
