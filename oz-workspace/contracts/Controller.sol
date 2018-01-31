@@ -112,9 +112,8 @@ contract Controller {
     *               Tokens are minted according to need and issued to the users
     *               Only valid users are able to withdraw, as well as users are limited to withdrawing
     *               once a month
-    * returns bool  Returns a true boolean if the transaction was successful
     */
-    function withdraw() public returns (bool) {
+    function withdraw() public {
         require(validatingMap[msg.sender]);
         require(canWithdraw(msg.sender));
         require(token.mintSet(msg.sender, userWaterLimit));
@@ -135,6 +134,9 @@ contract Controller {
         return lastTimeStamp[_user]<currentTimestamp;
     }
 
+
+    function pay(address _meter, uint value) public returns(bool) {
+    }
     /** 
     * Description   Function updating the timestamp associated with a users most recent withdrawal
     * Params _user  The public address of the user we are updating
