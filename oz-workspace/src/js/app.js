@@ -59,7 +59,7 @@ App = {
     $(document).on('click', '#addValidatedUserButton', App.handleAddValidatedUser); 
     $(document).on('click', '#removeUserButton', App.handleRemoveUser);             
     $(document).on('click', '#withDrawTokensButton', App.handleWithDrawTokens);     
-    $(document).on('click', '#checkAddressIfCanWithdrawButton', App.handleCheckAddressIfItCanWithDraw); //TODO: write event
+    $(document).on('click', '#checkAddressIfCanWithdrawButton', App.handleCheckAddressIfItCanWithDraw); 
     $(document).on('click', '#currentUserTokenBalanceButton', App.handleViewCurrentUserTokenBalance); //TODO: write event
   },
 
@@ -191,7 +191,43 @@ App = {
     });
 
   },
+
+  /**
+   * Handle event to see if use can withdraw ther tokens 
+   */
+  handleCheckAddressIfItCanWithDraw: function(event){
+    event.preventDefault();
+
+    //get account[0]
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+      var account = accounts[0];
+
+
+    //pull value off of UI element
+    var checkAddress = $('#checkAdressIfCanWithdrawInput').val(); 
+    
+     //get an instance of the contract
+     var controllerInstance;
+     App.contracts.Controller.deployed().then(function(instance) {
+        controllerInstance = instance;
+ 
+       // Execute can Withdraw
+       return controllerInstance.canWithdraw(checkAddress, {from: account});
+      }).then(function(result) {
+    
+        console.log(result);
+        //change the water Limit displayed
+        
+       
+      })
+
+    });  
+  },
   /*
+  
   handleTransfer: function(event) {
     event.preventDefault();
 
