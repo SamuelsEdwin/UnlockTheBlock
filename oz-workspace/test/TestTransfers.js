@@ -7,15 +7,25 @@ contract('controller',function(accounts) {
     let token;
     let tokenAddress;
     let controllerAddress;
+    let tokenOwnerAddress;
 
     beforeEach(async () => {
         token = await H2ICO.new();
         tokenAddress = await token.address;
         control = await controller.new(tokenAddress);
         controllerAddress = await controller.address;
+        
         await token.transferOwnership(controllerAddress,{from: accounts[0]});
+        tokenOwnerAddress = await token.owner();
         //token = control.generateToken();
       
+    });
+    it("Controller is token owner", async function() {
+
+        assert.equal(tokenOwnerAddress,controllerAddress,"controller is not owner");
+        assert.notEqual(tokenOwnerAddress,accounts[0],"controller is not owner");
+
+
     });
 
     it("should add user", async function() {
