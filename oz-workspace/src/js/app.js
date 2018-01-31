@@ -219,13 +219,43 @@ App = {
       }).then(function(result) {
     
         console.log(result);
-        //change the water Limit displayed
+      
         
-       
-      })
+      });
+    });
 
-    });  
   },
+  /** */
+  handleViewCurrentUserTokenBalance: function(event){
+    event.preventDefault();
+
+    //get access to account[0]
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+      var account = accounts[0];
+
+    //pull value off of UI element
+    var userAddress = $('#currentUserTokenBalanceBox').val(); 
+
+    var controllerInstance;
+    App.contracts.Controller.deployed().then(function(instance) {
+      controllerInstance = instance;
+
+         // Execute get Balance
+         return controllerInstance.getBalance(userAddress, {from: account});
+        }).then(function(result) {
+          
+          console.log(result);
+
+          
+        }).catch(function(err) {
+          console.log(err.message);
+        });
+      });
+  
+    },
   /*
   
   handleTransfer: function(event) {
@@ -258,6 +288,7 @@ App = {
     });
   },
   */
+  /**
   handleSet: function(event) {
     event.preventDefault();
 
@@ -286,8 +317,8 @@ App = {
         console.log(err.message);
       });
     });
-  },
-
+  },  */
+  /**
   getBalances: function(adopters, account) {
     console.log('Getting balances...');
 
@@ -312,7 +343,7 @@ App = {
         console.log(err.message);
       });
     });
-  }
+  } */
 
 };
 
