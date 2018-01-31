@@ -170,7 +170,7 @@ App = {
       controllerInstance = instance;
 
       // Execute removeUser
-      return controllerInstance.removeUser(ValidatedUser, {from: account});
+      return controllerInstance.removeUser( {from: account}, ValidatedUser);
       }).then(async function(result) {
         console.log(result);
 
@@ -295,12 +295,14 @@ App = {
       controllerInstance = instance;
       console.log("calling getUserBalance");
       console.log(getUser);
-      return controllerInstance.getBalance.call(getUser);
+      return controllerInstance.getBalance(getUser);
 
     }).then(function(result) {
 
      // App.displayWater = result.c[0]; 
+      
       console.log("this the user balance:");
+      console.log(result);
       return result.c[0];
      
       
@@ -331,7 +333,7 @@ App = {
       //call function to return totalUsers
       controllerInstance = instance;
       console.log("calling getTotalUsers");
-      return controllerInstance.getTotalUsers.call();
+      return controllerInstance.getTotalUsers();
 
     }).then(function(result) {
 
@@ -357,62 +359,7 @@ App = {
     document.getElementById("totalValidUsers").innerHTML = uCount;
   },
 
-  /**
-  handleSet: function(event) {
-    event.preventDefault();
 
-    var amount = parseInt($('#IncreaseAmount').val());
-    
-
-    console.log('Set amount by' + amount );
-
-    var H2ICOInstance;
-
-    web3.eth.getAccounts(function(error, accounts) {
-      if (error) {
-        console.log(error);
-      }
-
-      var account = accounts[0];
-
-      App.contracts.H2ICO.deployed().then(function(instance) {
-        H2ICOInstance = instance;
-
-        return H2ICOInstance.setSupply(amount);
-      }).then(function(result) {
-        alert('Increase Successful!');
-        return App.getBalances();
-      }).catch(function(err) {
-        console.log(err.message);
-      });
-    });
-  },  */
-  /**
-  getBalances: function(adopters, account) {
-    console.log('Getting balances...');
-
-    var H2ICOInstance;
-
-    web3.eth.getAccounts(function(error, accounts) {
-      if (error) {
-        console.log(error);
-      }
-
-      var account = accounts[0];
-
-      App.contracts.H2ICO.deployed().then(function(instance) {
-        H2ICOInstance = instance;
-
-        return H2ICOInstance.balanceOf(account);
-      }).then(function(result) {
-        balance = result.c[0];
-
-        $('#TTBalance').text(balance);
-      }).catch(function(err) {
-        console.log(err.message);
-      });
-    });
-  } */
 
 };
 
