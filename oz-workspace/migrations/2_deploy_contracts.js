@@ -1,27 +1,23 @@
 var controller = artifacts.require("Controller");
-var tokenSeller = artifacts.require("TokenSellerFactory");
+var tokenSellerFactory = artifacts.require("TokenSellerFactory");
 var token = artifacts.require("H2ICO");
+var tokenSeller = artifacts.require("TokenSeller");
 module.exports = function(deployer) {
   
   
-  let address
-  deployer.deploy(token);
-  deployer.deploy(controller);
+  let address;
+  
+  
 
-  token.deployed().then(async (result) => {
-     address = result.address
+  deployer.deploy(token).then(function() {
+    deployer.deploy(tokenSellerFactory,token.address).then(() => {
+      deployer.deploy(controller,token.address).then( function() {
+        
+        //controller.setTokenAddr(token.address);
+        
+    });
      
-  }).then(function(){
-
-    deployer.deploy(tokenSeller,address);
-    
-  }).then(function(){  
-
-      controller.deployed().then(async function(instance) {
-      instance.setTokenAddr(address);
-      
-       
-  })  
+  })
   });
 
   

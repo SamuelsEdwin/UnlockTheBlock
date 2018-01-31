@@ -23,10 +23,10 @@ contract Controller {
     /**
     * Description   Constructor initialising the controller contract
     */
-    function Controller () public {
+    function Controller (address _address) public {
         userWaterLimit = 0;
         owner = msg.sender;
-       // token = new H2ICO ();
+        token = H2ICO(_address);
     }
 
     /**
@@ -98,6 +98,14 @@ contract Controller {
         token.exchange(_from,_to,_value,5);//todo 5==burn rate change to dynamic burn rate.
     }
 
+    /**
+    * @dev Transfer tokens from one address to another burning a percentage of the tokens based on the user
+    * @param _to address The address which you want to transfer to
+    * @param _value uint256 the amount of tokens to be transferred
+    */
+    function pay(address _to, uint256 _value) public {
+        token.transfer(_to,_value);
+    }
     
     /**
     * Description   Function returning the number of registered valid users
@@ -134,9 +142,6 @@ contract Controller {
         return lastTimeStamp[_user]<currentTimestamp;
     }
 
-
-    function pay(address _meter, uint value) public returns(bool) {
-    }
     /** 
     * Description   Function updating the timestamp associated with a users most recent withdrawal
     * Params _user  The public address of the user we are updating
@@ -180,7 +185,7 @@ contract Controller {
     //     return rtrDate;
     // }
 
-    function getBalance (address _user) public view returns (uint256){
+    function getBalance (address _user) public view returns (uint256) {
         return token.balanceOf(_user);
     }
     //fix race condion
