@@ -10,7 +10,11 @@ contract H2ICO is MintableToken {
     string private symbol = "kl";
     uint8 private decimals = 3;
     uint private INITIAL_SUPPLY = 0;
+<<<<<<< HEAD
 //    address public owner;
+=======
+    
+>>>>>>> e9acc0a9651eac408fdc61aacb1acafc525b1ab8
 
     /*
         Description: Constructor for Token, generates a token with total supply of 0
