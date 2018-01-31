@@ -1,7 +1,10 @@
+
 App = {
   web3Provider: null,
   contracts: {},
+  displayWater: 500,
 
+ 
   /**Initialize the page
    * 
    */
@@ -60,7 +63,7 @@ App = {
     $(document).on('click', '#removeUserButton', App.handleRemoveUser);             
     $(document).on('click', '#withDrawTokensButton', App.handleWithDrawTokens);     
     $(document).on('click', '#checkAddressIfCanWithdrawButton', App.handleCheckAddressIfItCanWithDraw); 
-    $(document).on('click', '#currentUserTokenBalanceButton', App.handleViewCurrentUserTokenBalance); //TODO: write event
+    $(document).on('click', '#currentUserTokenBalanceButton', App.handleViewCurrentUserTokenBalance); 
   },
 
   /**
@@ -86,16 +89,24 @@ App = {
       controllerInstance = instance;
 
     // Execute function on smart contract
+    console.log("calling getsetWaterLimit");
       return controllerInstance.setUserWaterLimit(waterLimit, {from: account});
-      }).then(function(result) {
+      }).then(async function(result) {
        
         console.log(result);
-       
+          const newWaterLimit = await App.getWaterLimit();
+          console.log("new water limit" + newWaterLimit);
+          App.displayWaterLimit(newWaterLimit);
+      
+        
+    
       }).catch(function(err) {
         console.log(err.message);
-      });
+       });
     });
   },
+
+
 
   /**
    * Handle the event for adding validated users to the smart contract
@@ -258,6 +269,9 @@ App = {
     },
   /*
   
+
+
+  },
   handleTransfer: function(event) {
     event.preventDefault();
 
@@ -287,7 +301,35 @@ App = {
       });
     });
   },
-  */
+  /**function to return the water balance  */
+  getWaterLimit: function() {
+    var controllerInstance;
+    return App.contracts.Controller.deployed().then(function(instance) {
+      //call function to return waterLimit 
+      controllerInstance = instance;
+      console.log("calling getUserWaterLimit");
+      return controllerInstance.getUserWaterLimit.call();
+
+    }).then(function(result) {
+
+      App.displayWater = result.c[0]; 
+      console.log("this is display water"+ App.displayWater);
+      return result.c[0];
+     
+      
+    //handle errors
+    }).catch(function(err) {
+      console.log(err.message);
+      return err.message;
+    });
+  },
+
+  /**Display Water Limit*/
+  displayWaterLimit(wl)
+  {
+    document.getElementById("currentWaterLimit").innerHTML = wl;
+  }
+
   /**
   handleSet: function(event) {
     event.preventDefault();
