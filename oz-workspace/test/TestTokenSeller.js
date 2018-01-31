@@ -14,6 +14,7 @@ contract('TokenSeller',function(accounts) {
     var sellsTokens;
     var otherAsset;
     let mControl
+
     beforeEach(async () => {
         mToken = await Token.new();
         asset = await mToken.address;
@@ -25,10 +26,11 @@ contract('TokenSeller',function(accounts) {
         
         mTokenSeller = await TokenSeller.new(asset, sellPrice, units, sellsTokens);
         tokenSellerAddress = await mTokenSeller.address;
-        //mControl = await Controller.new();
-        //await  mControl.setTokenAddr(asset);
-        //await mControl.setUserWaterLimit(units,{from: accounts[0]});
-        //await mControl.withdraw({from: tokenSellerAddress});
+        mControl = await Controller.new();
+        await  mControl.setTokenAddr(asset);
+        await mControl.setUserWaterLimit(units,{from: accounts[0]});
+        
+     
     });
 
     it("All variables should be equal to the values past in by the constructor", async function() {
@@ -80,16 +82,20 @@ contract('TokenSeller',function(accounts) {
     // function makerWithdrawAsset(uint tokens) public onlyOwner returns (bool confirm) {
        
        it("makerWithdraw", async function() {
+        await mControl.addUser(accounts[1],{from: accounts[0]});
+        await mControl.withdraw({from: accounts[1]});
+        await mToken.transfer(tokenSellerAddress,40,{from: accounts[1]});
         var withdrawAmount = 5;
         let get;
         get = await mTokenSeller.makerWithdrawAsset(withdrawAmount,{from: accounts[0]});
         
         let mTokenSellerBalance;
         mTokenSellerBalance = await mToken.balanceOf(tokenSellerAddress);
-
+        let userOneBalance;
+        userOneBalance = await mToken.balanceOf(accounts[1]); 
         let mUnits;
         mUnits = await mTokenSeller.units();
-        assert.equal(mUnits.toNumber(),mTokenSellerBalance.toNumber(),"asset should be 'withdrawAmount' less" );
+        assert.equal(mUnits.toNumber(),userOneBalance.toNumber(),"asset should be 'withdrawAmount' less" );
         //assert.notEqual(mUnits.toNumber(),units,"asset should not be unchanged");
     });
 

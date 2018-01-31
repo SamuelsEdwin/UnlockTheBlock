@@ -5,25 +5,19 @@ var tokenSeller = artifacts.require("TokenSeller");
 module.exports = function(deployer) {
   
   
-  let address
-  deployer.deploy(token);
+  let address;
+  
   
 
-  token.deployed().then(async (result) => {
-     address = result.address
+  deployer.deploy(token).then(function() {
+    deployer.deploy(tokenSellerFactory,token.address).then(() => {
+      deployer.deploy(controller,token.address).then( function() {
+        
+        //controller.setTokenAddr(token.address);
+        
+    });
      
-  }).then(function(){
-
-    deployer.deploy(tokenSellerFactory,address);
-    
-  }).then(function(){  
-
-      deployer.deploy(controller);
-      controller.deployed().then(async function(instance) {
-      instance.setTokenAddr(address);
-      
-       
-  })  
+  })
   });
 
   

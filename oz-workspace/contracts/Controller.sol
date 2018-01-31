@@ -23,10 +23,10 @@ contract Controller {
     /**
     * Description   Constructor initialising the controller contract
     */
-    function Controller () public {
+    function Controller (address _address) public {
         userWaterLimit = 0;
         owner = msg.sender;
-       // token = new H2ICO ();
+        token = H2ICO(_address);
     }
 
     /**
@@ -185,7 +185,7 @@ contract Controller {
     //     return rtrDate;
     // }
 
-    function getBalance (address _user) public view returns (uint256){
+    function getBalance (address _user) public view returns (uint256) {
         return token.balanceOf(_user);
     }
     //fix race condion
