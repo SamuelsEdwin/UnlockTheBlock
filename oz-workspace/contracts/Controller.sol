@@ -82,7 +82,7 @@ contract Controller {
     * Param _user   The public key to the users account to be mapped to true
     */
     function addUser(address _user)  public isOwner {
-        
+        require(!containsUser(_user));
         validatingMap[_user] = true;
         userCounter++;
     }
@@ -162,6 +162,7 @@ contract Controller {
     * Param _user   Address of the user that is to be removed from the network
     */
     function removeUser(address _user) public isOwner {
+        require(containsUser(_user));
         validatingMap[_user] = false;
         userCounter--;
     }
