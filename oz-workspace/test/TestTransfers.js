@@ -8,6 +8,7 @@ contract('controller',function(accounts) {
     beforeEach(async () => {
         control = await controller.new();
         token = control.generateToken();
+      
     });
 
     it("should add user", async function() {
