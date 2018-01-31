@@ -18,7 +18,7 @@ contract Controller {
     mapping (address => uint) lastTimeStamp;
     mapping (address => uint) burnMap;
     
-    address tokenAddress;
+    address public tokenAddress;
     
     /**
     * Description   Constructor initialising the controller contract
