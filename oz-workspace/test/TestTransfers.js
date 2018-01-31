@@ -72,8 +72,8 @@ contract('controller',function(accounts) {
 
         //test to get lost water
         await control.exchange(accounts[1], accounts[2], 5);
-        const balanceOne = await control.getBalance(accounts[2]);
-        assert.equal(95,balanceOne.toNumber(),"incorrectly got burnt water ");
+        const balanceThree = await control.getBalance(accounts[2]);
+        assert.equal(95,balanceThree.toNumber(),"incorrectly got burnt water ");
 
     });
 
