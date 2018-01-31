@@ -1,8 +1,9 @@
 pragma solidity ^0.4.18;
 
-import "../node_modules/zeppelin-solidity/contracts/ownership/Ownable.sol";
-import "zeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
+//import "../node_modules/zeppelin-solidity/contracts/ownership/Ownable.sol";
+//import "zeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
 import "./TokenSeller.sol";
+//import "./H2ICO.sol";
 
 /**
  * TO DO: Fix interface to include inherited contracts to remove compile error for modified functions 

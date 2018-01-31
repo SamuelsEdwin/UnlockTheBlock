@@ -1,15 +1,7 @@
 pragma solidity ^0.4.18;
 
-import "../node_modules/zeppelin-solidity/contracts/ownership/Ownable.sol";
-import "zeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
-
-/*contract ERC20Partial {
-    function totalSupply() constant returns (uint totalSupply);
-    function balanceOf(address _owner) constant returns (uint balance);
-    function transfer(address _to, uint _value) returns (bool success);
-    event Transfer(address indexed _from, address indexed _to, uint _value);
-}
-*/
+//import "../node_modules/zeppelin-solidity/contracts/ownership/Ownable.sol";
+import "./H2ICO.sol";
 
 contract TokenSeller is Ownable {
 
