@@ -109,7 +109,6 @@ App = {
   },
 
 
-
   /**
    * Handle the event for adding validated users to the smart contract
    */
@@ -209,9 +208,9 @@ App = {
       }).then(async function(result) {
        
         console.log(result);
-          const newWaterLimit = await App.getWaterLimit();
-          console.log("new water limit" + newWaterLimit);
-          App.displayWaterLimit(newWaterLimit);
+         // const newWaterLimit = await App.getWaterLimit();
+         // console.log("new water limit" + newWaterLimit);
+         // App.displayWaterLimit(newWaterLimit);
       
         
     
@@ -256,73 +255,11 @@ App = {
 
   },
   /** */
-  handleViewCurrentUserTokenBalance: function(event){
-    event.preventDefault();
-
-    //get access to account[0]
-    web3.eth.getAccounts(function(error, accounts) {
-      if (error) {
-        console.log(error);
-      }
-      var account = accounts[0];
-
-    //pull value off of UI element
-    var userAddress = $('#currentUserTokenBalanceBox').val(); 
-
-    var controllerInstance;
-    App.contracts.Controller.deployed().then(function(instance) {
-      controllerInstance = instance;
-
-         // Execute get Balance
-         return controllerInstance.getBalance(userAddress, {from: account});
-        }).then(function(result) {
-          
-          console.log(result);
-
-          
-        }).catch(function(err) {
-          console.log(err.message);
-        });
-      });
+ 
   
-    },
-  /*
-  
-
-
-  },
-  handleTransfer: function(event) {
-    event.preventDefault();
-
-    var amount = parseInt($('#TTTransferAmount').val());
-    var toAddress = $('#TTTransferAddress').val();
-
-    console.log('Transfer ' + amount + ' TT to ' + toAddress);
-
-    var H2ICOInstance;
-
-    web3.eth.getAccounts(function(error, accounts) {
-      if (error) {
-        console.log(error);
-      }
-
-      var account = accounts[0];
-
-      App.contracts.H2ICO.deployed().then(function(instance) {
-        H2ICOInstance = instance;
-
-        return H2ICOInstance.transfer(toAddress, amount, {from: account});
-      }).then(function(result) {
-        alert('Transfer Successful!');
-        return App.getBalances();
-      }).catch(function(err) {
-        console.log(err.message);
-      });
-    });
-  },
-
   /**function to return the water balance  
    * TESTED PASSED
+   * 
   */
   getWaterLimit: function() {
     var controllerInstance;
@@ -345,6 +282,36 @@ App = {
       return err.message;
     });
   },
+
+  handleViewCurrentUserTokenBalance: function(event) {
+
+    //get the value off the box
+    var getUser = $('#currentUserTokenBalanceBox').val();
+
+    var controllerInstance;
+
+    return App.contracts.Controller.deployed().then(function(instance) {
+      //call function to return waterLimit 
+      controllerInstance = instance;
+      console.log("calling getUserBalance");
+      console.log(getUser);
+      return controllerInstance.getBalance.call(getUser);
+
+    }).then(function(result) {
+
+     // App.displayWater = result.c[0]; 
+      console.log("this the user balance:");
+      return result.c[0];
+     
+      
+    //handle errors
+    }).catch(function(err) {
+      console.log(err.message);
+      return err.message;
+    });
+  },
+
+
 
   /**Display Water Limit
    * TESTED WORKS
@@ -379,6 +346,7 @@ App = {
       console.log(err.message);
       return err.message;
     });
+    
   },
 
 
