@@ -44,6 +44,7 @@ App = {
       //TODO: we can retreive what information we need here
       // Use our contract to retieve and mark the adopted pets.
       // return App.getBalances();
+
     });
 
     //bind events allows us to set onclick listeners
