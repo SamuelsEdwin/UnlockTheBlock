@@ -13,7 +13,10 @@ module.exports = function(deployer) {
     deployer.deploy(tokenSellerFactory,token.address).then(() => {
       deployer.deploy(controller,token.address).then( function() {
         
-        //controller.setTokenAddr(token.address);
+        token.deployed().then( function(instance){
+          instance.transferOwnership(controller.address);
+         
+        })
         
     });
      
