@@ -1,14 +1,31 @@
 var controller = artifacts.require("Controller");
+var H2ICO = artifacts.require("H2ICO");
 
 contract('controller',function(accounts) {
-
     let control;
     let token;
+    let tokenAddress;
+    let controllerAddress;
+    let tokenOwnerAddress;
 
     beforeEach(async () => {
-        control = await controller.new();
-        token = control.generateToken();
+        token = await H2ICO.new({from: accounts[0]});
+        control = await controller.new(token.address, {from: accounts[0]});
+        //token = control.generateToken();
       
+    });
+    it("Controller is token owner", async function() {
+
+        assert.equal(tokenOwnerAddress,controllerAddress,"controller is not owner");
+        assert.notEqual(tokenOwnerAddress,accounts[0],"controller is not owner");
+
+
+    });
+
+    it("controller should be owner", async function() {
+        await token.transferOwnership(control.address, {from: accounts[0]})
+        const user = await token.owner();
+        assert.equal(user,control.address,"Controller not owner")
     });
 
     it("should add user", async function() {
@@ -73,7 +90,7 @@ contract('controller',function(accounts) {
         get = await control.getUserWaterLimit.call();
         assert.equal(80,get.toNumber(),"80 wasn't the water limit")
     });
-
+/*
     it ("should exchange tokens", async () => {
         let get
 
@@ -84,6 +101,8 @@ contract('controller',function(accounts) {
         await control.withdraw({from:accounts[1]});
         const balance = await control.getBalance(accounts[1]);
         assert.equal(100, balance.toNumber(), "Withdrawal unsuccessful");
+
+
         control.requestSale(100,{from: accounts[1]});
         await control.exchange(accounts[1], accounts[2], 100);
         const balanceOne = await control.getBalance(accounts[2]);
@@ -98,7 +117,7 @@ contract('controller',function(accounts) {
         // assert.equal(95,balanceThree.toNumber(),"incorrectly got burnt water ");
 
     });
-
+*/
     it ("should return the correct number of users", async () => {
         await control.addUser(accounts[1]);
         await control.addUser(accounts[2]);
@@ -110,14 +129,22 @@ contract('controller',function(accounts) {
     });
 
     it("should withdraw Tokens", async function() {
+        await token.transferOwnership(control.address, {from: accounts[0]})
+        const user = await token.owner();
+        assert.equal(user,control.address,"Controller not owner")
         await control.addUser(accounts[1]);
+        const addUserCount = await control.getTotalUsers();
+        assert.equal(1,addUserCount.toNumber(),"Incorrect Number of users recorded");
         await control.setUserWaterLimit(80);
+        const waterLimit = await control.getUserWaterLimit();
+        assert.equal(80,waterLimit.toNumber(),"Incorrect Water Limit Set");
         await control.withdraw({from: accounts[1]});
         const balance0 = await control.getBalance(accounts[1]);
         assert.equal(balance0.toNumber(), 80, "Balance was not withdrawn");
         await control.withdraw({from: accounts[1]});
         const balance1 = await control.getBalance(accounts[1]);
         assert.equal(balance1.toNumber(), 80, "Balance was withdrawn twice")
+       
     });
 
 });

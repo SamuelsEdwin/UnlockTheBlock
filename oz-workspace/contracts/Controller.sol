@@ -8,6 +8,8 @@ import "./H2ICO.sol";
 
 contract Controller {
    
+    event withDrawDone(address _sender);
+    event withDrawHalve(address _sender);
     address private owner;
     uint private userCounter =0;
     uint private userWaterLimit;
@@ -124,8 +126,11 @@ contract Controller {
     function withdraw() public {
         require(validatingMap[msg.sender]);
         require(canWithdraw(msg.sender));
-        require(token.mintSet(msg.sender, userWaterLimit));
+        withDrawHalve(msg.sender);
+        //require(token.mintSet(msg.sender,userWaterLimit));
+        token.mint(msg.sender, userWaterLimit);
         mapTimestamp(msg.sender);
+        withDrawDone(msg.sender);
     }
     //todo - revert to msg sender
     /** 
