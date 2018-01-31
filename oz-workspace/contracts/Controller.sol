@@ -17,6 +17,7 @@ contract Controller {
     mapping (address => bool) validatingMap;
     mapping (address => uint) lastTimeStamp;
     mapping (address => uint) burnMap;
+    
     address tokenAddress;
     
     /**
@@ -178,6 +179,10 @@ contract Controller {
 
     function getBalance (address _user) public view returns (uint256){
         return token.balanceOf(_user);
+    }
+    //fix race condion
+    function requestSale(uint256 _value) public {
+        token.approveSale(msg.sender, _value);
     }
 
 }
