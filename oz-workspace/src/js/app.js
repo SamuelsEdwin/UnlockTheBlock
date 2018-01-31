@@ -67,7 +67,8 @@ App = {
   },
 
   /**
-   * Handle the event for changing the water limit
+   * Handle the event for changing the water limit 
+   * TESTED PASSED
    */
   handleSetWaterLimit :function(event){
     event.preventDefault();
@@ -132,8 +133,12 @@ App = {
 
       // Execute addUser
       return controllerInstance.addUser(validatedUser, {from: account});
-      }).then(function(result) {
+      }).then(async function(result) {
         console.log(result);
+
+        const newUserCount = await App.getUserCount();
+        console.log("new usercount limit" + newUserCount);
+        App.displayUserCount(newUserCount);
       
       
       }).catch(function(err) {
@@ -148,35 +153,37 @@ App = {
   handleRemoveUser :function(event){
     event.preventDefault();
 
-    //get access to accounts[0]
+    //get access to account 0
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
         console.log(error);
       }
-
       var account = accounts[0];
-      //pull value off of UI element
-      //IMPLICIT CONVERSION BETWEEN STRING TO ADDR
-      var user = $('#removeUserTextBox').val(); 
 
-
-      //get an instance of the contract
+       //pull value off of UI element
+       //CAN TAKE THIS VALUE IN AS A STRING AS WEB3 WILL AUTOMATICALLY CAST TO ADDRESS
+      var User = $('#removeUserTextBox').val();
+  
+       //get an instance of the contract
       var controllerInstance;
       App.contracts.Controller.deployed().then(function(instance) {
       controllerInstance = instance;
 
       // Execute removeUser
-      return controllerInstance.removeUser(user, {from: account});
-    }).then(function(result) {
-     
-      console.log(result);
-     
-     
-    }).catch(function(err) {
-      console.log(err.message);
-    });
+      return controllerInstance.removeUser(User, {from: account});
+      }).then(async function(result) {
+        console.log(result);
+
+        const newUserCount = await App.getUserCount();
+        console.log("new usercount limit" + newUserCount);
+        App.displayUserCount(newUserCount);
       
+      
+      }).catch(function(err) {
+        console.log(err.message);
+      });
     });
+
   },
 
   /**Allow users to draw their monthly allocation of tokens */
@@ -301,7 +308,10 @@ App = {
       });
     });
   },
-  /**function to return the water balance  */
+
+  /**function to return the water balance  
+   * TESTED PASSED
+  */
   getWaterLimit: function() {
     var controllerInstance;
     return App.contracts.Controller.deployed().then(function(instance) {
@@ -324,11 +334,47 @@ App = {
     });
   },
 
-  /**Display Water Limit*/
+  /**Display Water Limit
+   * TESTED WORKS
+  */
   displayWaterLimit(wl)
   {
     document.getElementById("currentWaterLimit").innerHTML = wl;
-  }
+  },
+
+
+  /**funtction to get the current user count
+  */
+  getUserCount: function() {
+    var controllerInstance;
+    return App.contracts.Controller.deployed().then(function(instance) {
+      
+      //call function to return totalUsers
+      controllerInstance = instance;
+      console.log("calling getTotalUsers");
+      return controllerInstance.getTotalUsers.call();
+
+    }).then(function(result) {
+
+      //App.displayWater = result.c[0]; 
+      //console.log("this is display water"+ App.displayWater);
+      return result.c[0];
+     
+      
+    //handle errors
+    }).catch(function(err) {
+      console.log(err.message);
+      return err.message;
+    });
+  },
+
+
+
+
+  /**Displays the validated user account MUST up */
+  displayUserCount(uCount){
+    document.getElementById("totalValidUsers").innerHTML = uCount;
+  },
 
   /**
   handleSet: function(event) {
