@@ -1,6 +1,7 @@
 var controller = artifacts.require("Controller");
-var tokenSellerFactory = artifacts.require("TokenSellerFactory");
+var tokenSeller = artifacts.require("TokenSellerFactory");
 var token = artifacts.require("H2ICO");
+<<<<<<< HEAD
 var tokenSeller = artifacts.require("TokenSeller");
 /*
 module.exports = function(deployer) {
@@ -34,3 +35,34 @@ module.exports = function(deployer) {
       })
   })
 }
+=======
+module.exports = function(deployer) {
+  
+  
+  let address
+  deployer.deploy(token);
+  deployer.deploy(controller);
+
+  token.deployed().then(async (result) => {
+     address = result.address
+     
+  }).then(function(){
+
+    deployer.deploy(tokenSeller,address);
+    
+  }).then(function(){  
+
+      controller.deployed().then(async function(instance) {
+      instance.setTokenAddr(address);
+      
+       
+  })  
+  });
+
+  
+    
+  
+  
+  
+};
+>>>>>>> 25c47ce9274a2ff71cf7d85a80bac4ade2630fd7

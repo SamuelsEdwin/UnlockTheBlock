@@ -10,7 +10,7 @@ contract H2ICO is MintableToken {
     string private symbol = "kl";
     uint8 private decimals = 3;
     uint private INITIAL_SUPPLY = 0;
-//    address public owner;
+    address private owner;
 
     /*
         Description: Constructor for Token, generates a token with total supply of 0
@@ -27,10 +27,6 @@ contract H2ICO is MintableToken {
         allowed[_sender][owner] = _value;
         Approval(_sender, owner, _value);
         return true;
-    }
-
-    function changeOwner (address newOwner) public onlyOwner returns (bool) {
-        owner = newOwner;
     }
     /**
     * @dev Transfer tokens from one address to another burning a percentage of the tokens across the transferal

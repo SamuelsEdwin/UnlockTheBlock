@@ -8,8 +8,6 @@ import "./H2ICO.sol";
 
 contract Controller {
    
-    event withDrawDone(address _sender);
-    event withDrawHalve(address _sender);
     address private owner;
     uint private userCounter =0;
     uint private userWaterLimit;
@@ -25,10 +23,14 @@ contract Controller {
     /**
     * Description   Constructor initialising the controller contract
     */
-    function Controller (address _address) public {
+    function Controller () public {
         userWaterLimit = 0;
         owner = msg.sender;
+<<<<<<< HEAD
 //        token = H2ICO(_address);
+=======
+       // token = new H2ICO ();
+>>>>>>> 25c47ce9274a2ff71cf7d85a80bac4ade2630fd7
     }
 
     /**
@@ -84,7 +86,7 @@ contract Controller {
     * Param _user   The public key to the users account to be mapped to true
     */
     function addUser(address _user)  public isOwner {
-        require(!containsUser(_user));
+        
         validatingMap[_user] = true;
         userCounter++;
     }
@@ -100,14 +102,6 @@ contract Controller {
         token.exchange(_from,_to,_value,5);//todo 5==burn rate change to dynamic burn rate.
     }
 
-    /**
-    * @dev Transfer tokens from one address to another burning a percentage of the tokens based on the user
-    * @param _to address The address which you want to transfer to
-    * @param _value uint256 the amount of tokens to be transferred
-    */
-    function pay(address _to, uint256 _value) public {
-        token.transfer(_to,_value);
-    }
     
     /**
     * Description   Function returning the number of registered valid users
@@ -122,15 +116,13 @@ contract Controller {
     *               Tokens are minted according to need and issued to the users
     *               Only valid users are able to withdraw, as well as users are limited to withdrawing
     *               once a month
+    * returns bool  Returns a true boolean if the transaction was successful
     */
-    function withdraw() public {
+    function withdraw() public returns (bool) {
         require(validatingMap[msg.sender]);
         require(canWithdraw(msg.sender));
-        withDrawHalve(msg.sender);
-        //require(token.mintSet(msg.sender,userWaterLimit));
-        token.mint(msg.sender, userWaterLimit);
+        require(token.mintSet(msg.sender, userWaterLimit));
         mapTimestamp(msg.sender);
-        withDrawDone(msg.sender);
     }
     //todo - revert to msg sender
     /** 
@@ -174,7 +166,6 @@ contract Controller {
     * Param _user   Address of the user that is to be removed from the network
     */
     function removeUser(address _user) public isOwner {
-        require(containsUser(_user));
         validatingMap[_user] = false;
         userCounter--;
     }
@@ -190,7 +181,7 @@ contract Controller {
     //     return rtrDate;
     // }
 
-    function getBalance (address _user) public view returns (uint256) {
+    function getBalance (address _user) public view returns (uint256){
         return token.balanceOf(_user);
     }
     //fix race condion
