@@ -176,7 +176,7 @@ contract Controller {
     function removeUser(address _user) public isOwner {
         require(containsUser(_user));
         validatingMap[_user] = false;
-        userCounter = userCounter+1;
+        userCounter--;
     }
 
     /**

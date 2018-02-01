@@ -9,18 +9,15 @@ module.exports = function(deployer) {
       return token.deployed()
         .then(t => {
           token = t;
-          return tokenSellerFactory.new(t.address)
-        })
-        .then(() => {
-          console.log('FRN:', token.address)
-          return controller.new(token.address)
-        })
-        .then(c => {
-          controller = c;
-          console.log('Controller:', c.address)
-          token.transferOwnership(c.address).then((res) => {
+          deployer.deploy(tokenSellerFactory,token.address);
+          deployer.deploy(controller,token.address);
+          return controller.deployed().then(c => {
+            controller = c;
+            console.log('Controller:', controller.address)
+            token.transferOwnership(controller.address).then((res) => {
             console.log('Changed controller!', res.tx);
-          });
+            });
+          })
         })
-    })
+      })
 };
