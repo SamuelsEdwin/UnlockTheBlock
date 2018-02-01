@@ -1,16 +1,15 @@
 pragma solidity ^0.4.18;
 
-//import "../node_modules/zeppelin-solidity/contracts/ownership/Ownable.sol";
-import "./H2ICO.sol";
+import "../node_modules/zeppelin-solidity/contracts/ownership/Ownable.sol";
+import "../node_modules/zeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
 
 contract TokenSeller is Ownable {
 
     address public asset;       //token to be traded
-    uint public sellPrice;      //price of the lot
-    uint public units;          //lot size
+    uint public sellPrice;      //price in ether of the token seller wants
+    uint public units;          //number of tokens on offer by seller
 
     bool public sellsTokens;    //bool to check if the contract is selling tokens
-//    MintableToken public token; 
 
     event ActivatedEvent(bool sells);           //event trigger to show that a account sells
     event MakerWithdrewAsset(uint256 tokens);   //event trigger when account withdraws a token asset
@@ -43,14 +42,23 @@ contract TokenSeller is Ownable {
         ActivatedEvent(sellsTokens);
     }
 
-    /** Withdraw tokens from Contract
-     * Contract Owner can withdraw tokens from the contract, essentially decreasing the order to sell
-     * @param tokens amount of tokens to be withdrawn from the contract
-     * @return confirm confirmation of withdrawal
+    
+    /** Withdraw tokens from contract
+     * Owner can withdraw tokens deposited into contract.
+     * @param tokens amount of tokens to be withdrawn
+     * @return ok withdrawel confirmation
      */
-    function makerWithdrawAsset(uint tokens) public onlyOwner returns (bool confirm) {
+    function makerWithdrawTokens(uint256 tokens) public onlyOwner returns (bool ok) {
+        require(StandardToken(asset).balanceOf(this) >= tokens);
         MakerWithdrewAsset(tokens);
         return StandardToken(asset).transfer(owner, tokens);
+    }
+    
+    /** Token balance of contract
+     * @return balance shows the balance of tokens deposited in contract
+     */
+    function makerGetBalance() public view returns (uint balance) {
+        return StandardToken(asset).balanceOf(this);
     }
  
     /** Return Tokens to Contract Maker
@@ -80,36 +88,35 @@ contract TokenSeller is Ownable {
         return false;
     }
 
-    /** Taker Purchases Token
-     * The taker is able to purchase tokens offered by the contract with thei ether.
-     * 
-     * TO DO: (1) Remove depreacted 'throw' commands and replace with 'require()' or suitable counterpart
-              (2) Fix "else if" parse error
+    /** Show ether balance for contract
+     * @return ether shows ether held in smart contract
      */
-    function takerBuyAsset() payable public {
+    function getEtherBalance() public view returns (uint ethers) {
+        return this.balance;
+    }
+
+    /** Taker Purchases Token
+     * Tokens held in contract are purchased in ether. The contract is held and owned by the maker.
+     * The taker pays ether to the contract in exchange for the deposited tokens
+     */
+    function takerBuyAsset() public payable {
         if (sellsTokens || msg.sender == owner) {
             // Note that sellPrice has already been validated as > 0
-            uint order = msg.value / sellPrice;
             // Note that units has already been validated as > 0
-            uint can_sell = StandardToken(asset).balanceOf(address(this)) / units;
-            uint change = 0;
-            if (msg.value > (can_sell * sellPrice)) {
-                change = msg.value - (can_sell * sellPrice);
-                order = can_sell;
-            }
-            if (change > 0) {
-                require(msg.sender.send(change));
-            }
-            if (order > 0) {
-                require(StandardToken(asset).transfer(msg.sender, order * units));
-            }
-            TakerBoughtAsset(msg.sender, msg.value, change, order * units);
+            require(msg.value == sellPrice);
+            uint can_sell = makerGetBalance();
+            //uint256 change = 0;
+            StandardToken(asset).transfer(msg.sender, can_sell);
+            units -= can_sell;
+            sellPrice -= msg.value;
+            TakerBoughtAsset(msg.sender, msg.value, units, sellPrice);
+
         } else {
-            // Return user funds if the contract is not selling 
+        // Return user funds if the contract is not selling
             require(msg.sender.send(msg.value));
         }
     }
-    
+
     /** Fallback function 
      */
     function() payable public {
