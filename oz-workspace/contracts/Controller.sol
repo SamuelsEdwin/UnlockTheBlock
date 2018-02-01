@@ -28,7 +28,7 @@ contract Controller {
     function Controller (address _address) public {
         userWaterLimit = 0;
         owner = msg.sender;
-        token = H2ICO(_address);
+//        token = H2ICO(_address);
     }
 
     /**
